@@ -1,3 +1,5 @@
+import { drizzle } from "drizzle-orm/postgres-js";
+import { migrate } from "drizzle-orm/postgres-js/migrator";
 import postgres from "postgres";
 
 // Runs once before all tests: gives them a brand-new, empty lattely_test database.
@@ -16,7 +18,8 @@ export default async function setup() {
   await admin`CREATE DATABASE lattely_test`;
   await admin.end();
 
-  const sql = postgres(process.env.DATABASE_URL);
-  await sql`CREATE EXTENSION postgis`;
-  await sql.end();
+  // Build the empty database with the same migrations dev and production use.
+  const db = drizzle(process.env.DATABASE_URL);
+  await migrate(db, { migrationsFolder: "./drizzle" });
+  await db.$client.end();
 }
