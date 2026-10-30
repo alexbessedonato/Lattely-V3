@@ -26,7 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         {children}
-        {/* Vercel Web Analytics: cookie-free, so no consent banner needed */}
+        {/* Cookie-free, so no consent banner needed */}
         <Analytics />
       </body>
     </html>
