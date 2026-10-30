@@ -1,0 +1,16 @@
+# Local Postgres + PostGIS for `pnpm dev` (database "lattely") and tests ("lattely_test").
+services:
+  db:
+    # Same recipe as the official postgis/postgis image, but also built for Apple silicon.
+    image: imresamu/postgis:17-3.5
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: lattely
+    ports:
+      - "5433:5432"
+    healthcheck:
+      # -h 127.0.0.1 so it only reports ready once Postgres accepts real connections, not during first-time setup.
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "postgres"]
+      interval: 1s
+      retries: 30
