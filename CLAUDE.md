@@ -1,5 +1,9 @@
 # Lattely
 
+## Code conventions
+
+- No `index.ts` files and no barrels: every import names the real file (`@/db/client`, not `@/db`), so you always know which file to open.
+
 ## Agent skills
 
 ### Issue tracker

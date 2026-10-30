@@ -1,5 +1,5 @@
 import { afterAll, expect, test } from "vitest";
-import { db } from "@/db";
+import { db } from "@/db/client";
 import { shops } from "@/db/schema";
 import { getRanking } from "@/lib/ranking";
 
