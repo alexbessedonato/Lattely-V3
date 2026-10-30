@@ -1,4 +1,5 @@
-// Fills the dev database with a few live Shops so the home page has something to show.
+// Fills a database with a few real, live Shops so the home page has something to show.
+// Also run on Neon `production`, so only add real Shops here, never fake test data.
 import { drizzle } from "drizzle-orm/postgres-js";
 import { shops } from "../db/schema.ts";
 

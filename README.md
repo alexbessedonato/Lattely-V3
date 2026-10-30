@@ -40,4 +40,4 @@ DATABASE_URL="$(neon connection-string development --project-id silent-forest-50
 DATABASE_URL="$(neon connection-string production --project-id silent-forest-50770475)" pnpm db:migrate
 ```
 
-The same trick runs `pnpm db:seed` on `development`. Never seed `production`.
+The same trick runs `pnpm db:seed` on either branch. The seed only holds real Shops, so it's safe on `production`; never add fake test Shops to it.
