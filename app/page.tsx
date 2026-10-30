@@ -7,19 +7,19 @@ export default function Home() {
     <main className="mx-auto w-full max-w-md p-4">
       <h1 className="text-2xl font-semibold">Lattely</h1>
       <Suspense fallback={<p>Loading Shops…</p>}>
-        <ShopList />
+        <RankedShops />
       </Suspense>
     </main>
   );
 }
 
-async function ShopList() {
+async function RankedShops() {
   await connection(); // read the database on every visit, not once at build time
-  const shops = await getRanking();
+  const ranking = await getRanking();
 
   return (
     <ul className="mt-4 space-y-2">
-      {shops.map((shop) => (
+      {ranking.map((shop) => (
         <li key={shop.id}>{shop.name}</li>
       ))}
     </ul>

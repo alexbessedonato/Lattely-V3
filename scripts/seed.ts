@@ -2,6 +2,7 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import { shops } from "../db/schema.ts";
 
+// Own connection: plain `node` can't resolve `@/` imports, so @/db/client isn't usable here.
 const db = drizzle(process.env.DATABASE_URL!);
 
 await db
