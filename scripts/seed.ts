@@ -18,7 +18,7 @@ await db
       name: "Nømad Coffee Lab",
       slug: "nomad-coffee-lab",
       address: "Passatge Sert, 12",
-      link: "https://nomadcoffee.es",
+      instagramOrWebsite: "https://nomadcoffee.es",
       status: "live",
     },
     {

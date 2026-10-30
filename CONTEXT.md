@@ -7,7 +7,7 @@ A community ranking of specialty coffee shops in Barcelona, browsable by neighbo
 ### Shops
 
 **Shop**:
-A specialty coffee shop in Barcelona that can be ranked once an Admin approves it. It is live, closed (hidden but keeps its Ratings), or still a Submission.
+A specialty coffee shop in Barcelona that can be ranked once an Admin approves it. It is still a Submission (status `pending`), live, rejected (an Admin turned the Submission down), or closed (hidden but keeps its Ratings).
 _Avoid_: Café, coffee place, venue, listing
 
 **Submission**:

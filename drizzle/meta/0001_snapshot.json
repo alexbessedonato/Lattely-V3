@@ -1,5 +1,5 @@
 {
-  "id": "d3ec46fd-49d4-4707-b21d-c1cad2eeac8a",
+  "id": "46a0882a-77a1-4ef8-b032-332f0bddb39b",
   "prevId": "5cb1b3c7-8fa2-450c-b723-c833181b5e18",
   "version": "7",
   "dialect": "postgresql",
@@ -43,8 +43,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "link": {
-          "name": "link",
+        "instagram_or_website": {
+          "name": "instagram_or_website",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -64,7 +64,9 @@
         "shops_slug_unique": {
           "name": "shops_slug_unique",
           "nullsNotDistinct": false,
-          "columns": ["slug"]
+          "columns": [
+            "slug"
+          ]
         }
       },
       "policies": {},
@@ -76,7 +78,12 @@
     "public.shop_status": {
       "name": "shop_status",
       "schema": "public",
-      "values": ["submission", "live", "closed"]
+      "values": [
+        "pending",
+        "live",
+        "rejected",
+        "closed"
+      ]
     }
   },
   "schemas": {},

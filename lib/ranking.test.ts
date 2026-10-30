@@ -20,10 +20,10 @@ test("the Ranking only includes live Shops", async () => {
       status: "closed",
     },
     {
-      name: "Submitted Shop",
-      slug: "submitted-shop",
+      name: "Pending Shop",
+      slug: "pending-shop",
       address: "Carrer 3",
-      status: "submission",
+      status: "pending",
     },
   ]);
 

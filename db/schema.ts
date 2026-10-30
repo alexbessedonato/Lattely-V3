@@ -1,8 +1,9 @@
 import { integer, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
 
 export const shopStatus = pgEnum("shop_status", [
-  "submission",
+  "pending",
   "live",
+  "rejected",
   "closed",
 ]);
 
@@ -11,6 +12,6 @@ export const shops = pgTable("shops", {
   name: text().notNull(),
   slug: text().notNull().unique(),
   address: text().notNull(),
-  link: text(),
+  instagramOrWebsite: text("instagram_or_website"),
   status: shopStatus().notNull(),
 });
