@@ -28,3 +28,16 @@ After a restart, run `docker compose up -d` again before `pnpm dev`. The data is
 | `pnpm db:generate` | Write a new migration after changing `db/schema.ts`                           |
 | `pnpm db:migrate`  | Apply new migrations to the database in `DATABASE_URL` (dev by default)       |
 | `pnpm db:seed`     | Add the sample Shops to the dev database (safe to run again)                  |
+
+## Neon (deployed databases)
+
+The deployed app uses the Neon project `Lattely-V3` (Frankfurt), which has two branches: `production` for the live site and `development` for Vercel previews. Local dev and tests never touch Neon.
+
+After adding a migration, apply it to both branches. A `DATABASE_URL` set in the terminal wins over `.env.development`:
+
+```bash
+DATABASE_URL="$(neon connection-string development --project-id silent-forest-50770475)" pnpm db:migrate
+DATABASE_URL="$(neon connection-string production --project-id silent-forest-50770475)" pnpm db:migrate
+```
+
+The same trick runs `pnpm db:seed` on `development`. Never seed `production`.
