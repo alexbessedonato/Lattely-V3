@@ -3,9 +3,12 @@
 import { useQueryStates } from "nuqs";
 import { Label } from "@/components/ui/label";
 import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { formatDistance } from "@/lib/format-distance";
 import { filterParams, radiusOptionsM } from "@/lib/search-params";
@@ -25,6 +28,11 @@ export function Filters({
   );
   const hasCentrePoint = neighbourhood !== undefined;
   const radiusM = hasCentrePoint ? (r ?? 1000) : null;
+  // null is "All of Barcelona": no Centre point.
+  const neighbourhoodOptions = [
+    { value: null, label: "All of Barcelona" },
+    ...neighbourhoods.map(({ name, slug }) => ({ value: slug, label: name })),
+  ];
 
   return (
     <section
@@ -35,30 +43,32 @@ export function Filters({
         <Label htmlFor="neighbourhood" className="font-semibold text-mocha">
           Neighbourhood
         </Label>
-        <NativeSelect
-          id="neighbourhood"
-          size="lg"
-          className="w-full"
-          value={neighbourhood?.slug ?? ""}
-          onChange={(event) =>
+        <Select
+          items={neighbourhoodOptions} // lets the trigger show the picked name, not its slug
+          value={neighbourhood?.slug ?? null}
+          onValueChange={(slug) =>
             // Picking a Neighbourhood starts at 1 km; "All of Barcelona" clears both.
-            setFilter(
-              event.target.value
-                ? { n: event.target.value, r: 1000 }
-                : { n: null, r: null },
-            )
+            setFilter(slug ? { n: slug, r: 1000 } : { n: null, r: null })
           }
         >
-          <NativeSelectOption value="">All of Barcelona</NativeSelectOption>
-          {neighbourhoods.map((neighbourhood) => (
-            <NativeSelectOption
-              key={neighbourhood.slug}
-              value={neighbourhood.slug}
-            >
-              {neighbourhood.name}
-            </NativeSelectOption>
-          ))}
-        </NativeSelect>
+          <SelectTrigger
+            id="neighbourhood"
+            className="h-11 w-full rounded-full bg-white pr-4 pl-4 text-base"
+          >
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {neighbourhoodOptions.map((option) => (
+              <SelectItem
+                key={option.label}
+                value={option.value}
+                className="py-2.5 text-base"
+              >
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="flex flex-col gap-2">
