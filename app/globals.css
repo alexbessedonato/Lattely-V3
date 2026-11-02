@@ -56,24 +56,25 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  /* shadcn components read these, so they use the café palette above (same hex values) */
+  --background: #f6f0e6;
+  --foreground: #2b1d14;
+  --card: #fffbf4;
+  --card-foreground: #2b1d14;
+  --popover: #fffbf4;
+  --popover-foreground: #2b1d14;
+  --primary: #2b1d14;
+  --primary-foreground: #f6f0e6;
+  --secondary: #e6dacb;
+  --secondary-foreground: #2b1d14;
+  --muted: #e6dacb;
+  --muted-foreground: #6e5a4b;
+  --accent: #e6dacb;
+  --accent-foreground: #2b1d14;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: #e6dacb;
+  --input: #d9c8b4; /* form controls get a slightly darker edge than cards, as in the design */
+  --ring: #8f4420;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);

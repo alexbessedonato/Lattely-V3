@@ -1,7 +1,12 @@
 "use client";
 
 import { useQueryStates } from "nuqs";
-import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { formatDistance } from "@/lib/format-distance";
 import { filterParams, radiusOptionsM } from "@/lib/search-params";
 
@@ -27,14 +32,13 @@ export function Filters({
       className="mt-4 flex flex-col gap-3.5 rounded-[20px] border border-latte bg-paper p-4"
     >
       <div className="flex flex-col gap-1.5">
-        <label
-          htmlFor="neighbourhood"
-          className="text-sm font-semibold text-mocha"
-        >
+        <Label htmlFor="neighbourhood" className="font-semibold text-mocha">
           Neighbourhood
-        </label>
-        <select
+        </Label>
+        <NativeSelect
           id="neighbourhood"
+          size="lg"
+          className="w-full"
           value={neighbourhood?.slug ?? ""}
           onChange={(event) =>
             // Picking a Neighbourhood starts at 1 km; "All of Barcelona" clears both.
@@ -44,66 +48,61 @@ export function Filters({
                 : { n: null, r: null },
             )
           }
-          className="h-11.5 rounded-full border border-latte bg-white px-4"
         >
-          <option value="">All of Barcelona</option>
+          <NativeSelectOption value="">All of Barcelona</NativeSelectOption>
           {neighbourhoods.map((neighbourhood) => (
-            <option key={neighbourhood.slug} value={neighbourhood.slug}>
+            <NativeSelectOption
+              key={neighbourhood.slug}
+              value={neighbourhood.slug}
+            >
               {neighbourhood.name}
-            </option>
+            </NativeSelectOption>
           ))}
-        </select>
+        </NativeSelect>
       </div>
 
       <div className="flex flex-col gap-2">
         <span id="radius-label" className="text-sm font-semibold text-mocha">
           How far will you walk?
         </span>
-        <div
-          role="group"
+        <ToggleGroup
           aria-labelledby="radius-label"
-          className="flex flex-wrap gap-2"
+          variant="outline"
+          className="flex-wrap"
+          // Values are strings; "anywhere" stands for no Radius.
+          value={[radiusM === null ? "anywhere" : String(radiusM)]}
+          onValueChange={([picked]) => {
+            // Clicking the pressed one un-presses it (picked is undefined): keep the Radius instead.
+            const option = radiusOptionsM.find((m) => String(m) === picked);
+            if (option) setFilter({ r: option });
+          }}
         >
           {radiusOptionsM.map((option) => (
-            <RadiusButton
+            <RadiusItem
               key={option}
-              label={formatDistance(option)}
-              pressed={radiusM === option}
+              value={String(option)}
               disabled={!hasCentrePoint} // a Radius needs a Centre point to measure from
-              onClick={() => setFilter({ r: option })}
-            />
+            >
+              {formatDistance(option)}
+            </RadiusItem>
           ))}
-          <RadiusButton
-            label="Anywhere"
-            pressed={radiusM === null}
+          <RadiusItem
+            value="anywhere"
             disabled={hasCentrePoint} // only available with no Centre point
-          />
-        </div>
+          >
+            Anywhere
+          </RadiusItem>
+        </ToggleGroup>
       </div>
     </section>
   );
 }
 
-function RadiusButton({
-  label,
-  pressed,
-  disabled,
-  onClick,
-}: {
-  label: string;
-  pressed: boolean;
-  disabled: boolean;
-  onClick?: () => void;
-}) {
+function RadiusItem(props: React.ComponentProps<typeof ToggleGroupItem>) {
   return (
-    <Button
-      variant="outline"
-      aria-pressed={pressed}
-      disabled={disabled}
-      onClick={onClick}
-      className="h-11 rounded-full border-latte bg-white px-3.5 text-sm text-espresso disabled:border-dashed aria-pressed:border-espresso aria-pressed:bg-espresso aria-pressed:font-semibold aria-pressed:text-cream"
-    >
-      {label}
-    </Button>
+    <ToggleGroupItem
+      className="h-11 rounded-full bg-white px-3.5 disabled:border-dashed aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:font-semibold aria-pressed:text-primary-foreground"
+      {...props}
+    />
   );
 }
