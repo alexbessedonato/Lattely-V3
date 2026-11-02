@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import {
   check,
+  geometry,
   integer,
   pgEnum,
   pgTable,
@@ -22,6 +23,16 @@ export const shops = pgTable("shops", {
   address: text().notNull(),
   instagramOrWebsite: text("instagram_or_website"),
   status: shopStatus().notNull(),
+  // Longitude (x) and latitude (y). Null until we know where the Shop is; such Shops only show with no Centre point.
+  location: geometry({ type: "point", mode: "xy", srid: 4326 }),
+});
+
+export const neighbourhoods = pgTable("neighbourhoods", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  name: text().notNull(),
+  slug: text().notNull().unique(),
+  // Longitude (x) and latitude (y) of the Neighbourhood's Centre point.
+  centre: geometry({ type: "point", mode: "xy", srid: 4326 }).notNull(),
 });
 
 export const ratings = pgTable(
