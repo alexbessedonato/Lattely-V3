@@ -1,11 +1,19 @@
 import { Star } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { Suspense } from "react";
 import { Filters } from "@/components/filters";
+import { buttonVariants } from "@/components/ui/button";
 import { formatDistance } from "@/lib/format-distance";
 import { getNeighbourhoods } from "@/lib/neighbourhoods";
 import { getRanking } from "@/lib/ranking";
-import { loadFilterParams } from "@/lib/search-params";
+import {
+  loadFilterParams,
+  type RadiusM,
+  serializeFilterParams,
+  widerRadius,
+} from "@/lib/search-params";
+import { cn } from "@/lib/utils";
 
 type RankedShop = Awaited<ReturnType<typeof getRanking>>[number];
 
@@ -35,11 +43,9 @@ async function RankedShops({
   const neighbourhood = neighbourhoods.find(
     (neighbourhood) => neighbourhood.slug === n,
   );
+  const radiusM = r ?? 1000; // a Centre point with no Radius yet means 1 km
   const ranking = await getRanking(
-    neighbourhood && {
-      centrePoint: neighbourhood.centre,
-      radiusM: r ?? 1000, // a Centre point with no Radius yet means 1 km
-    },
+    neighbourhood && { centrePoint: neighbourhood.centre, radiusM },
   );
   const [first, ...runnersUp] = ranking.slice(0, 3);
   const rest = ranking.slice(3);
@@ -53,15 +59,21 @@ async function RankedShops({
         }))}
       />
 
-      <section aria-label="Top three" className="mt-4 flex flex-col gap-3.5">
-        {first && <ShopCard shop={first} big />}
+      {neighbourhood && ranking.length === 0 && (
+        <NoShops neighbourhoodSlug={neighbourhood.slug} radiusM={radiusM} />
+      )}
 
-        <div className="grid grid-cols-2 gap-3.5">
-          {runnersUp.map((shop) => (
-            <ShopCard key={shop.id} shop={shop} />
-          ))}
-        </div>
-      </section>
+      {first && (
+        <section aria-label="Top three" className="mt-4 flex flex-col gap-3.5">
+          <ShopCard shop={first} big />
+
+          <div className="grid grid-cols-2 gap-3.5">
+            {runnersUp.map((shop) => (
+              <ShopCard key={shop.id} shop={shop} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {rest.length > 0 && (
         <section aria-label="More shops" className="mt-6">
@@ -90,6 +102,37 @@ async function RankedShops({
         </section>
       )}
     </>
+  );
+}
+
+// A filter that finds nothing offers the next Radius up, or all of Barcelona after 5 km.
+function NoShops({
+  neighbourhoodSlug,
+  radiusM,
+}: {
+  neighbourhoodSlug: string;
+  radiusM: RadiusM;
+}) {
+  const wider = widerRadius(radiusM);
+
+  return (
+    <section className="mt-4 flex flex-col items-center gap-4 rounded-[20px] border border-latte bg-paper p-6 text-center">
+      <p className="font-heading text-[22px] font-semibold">
+        No shops within {formatDistance(radiusM)}
+      </p>
+
+      {/* A plain link: it only goes to another URL, so it works before JavaScript loads and Back undoes it */}
+      <Link
+        href={
+          wider
+            ? serializeFilterParams({ n: neighbourhoodSlug, r: wider })
+            : "/"
+        }
+        className={cn(buttonVariants(), "h-11 rounded-full px-5 text-base")}
+      >
+        {wider ? `Widen to ${formatDistance(wider)}` : "Show all of Barcelona"}
+      </Link>
+    </section>
   );
 }
 
