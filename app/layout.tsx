@@ -33,6 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         {/* Lets client components like Filters change the URL with nuqs */}
         <NuqsAdapter>{children}</NuqsAdapter>
+
         {/* Cookie-free, so no consent banner needed */}
         <Analytics />
       </body>

@@ -15,6 +15,7 @@ export default function Home({ searchParams }: PageProps<"/">) {
       <h1 className="flex h-16 items-center font-heading text-2xl font-bold">
         Lattely
       </h1>
+
       <Suspense fallback={<p>Loading Shops…</p>}>
         <RankedShops searchParams={searchParams} />
       </Suspense>
@@ -51,8 +52,10 @@ async function RankedShops({
           slug,
         }))}
       />
+
       <section aria-label="Top three" className="mt-4 flex flex-col gap-3.5">
         {first && <ShopCard shop={first} big />}
+
         <div className="grid grid-cols-2 gap-3.5">
           {runnersUp.map((shop) => (
             <ShopCard key={shop.id} shop={shop} />
@@ -65,6 +68,7 @@ async function RankedShops({
           <h2 className="mb-2 font-heading text-[22px] font-semibold">
             Also worth the walk
           </h2>
+
           <ol>
             {rest.map((shop) => (
               <li
@@ -74,8 +78,11 @@ async function RankedShops({
                 <span className="w-6 text-right font-heading text-[17px] font-semibold text-clay">
                   {shop.rank}
                 </span>
+
                 <span className="flex-1 font-semibold">{shop.name}</span>
+
                 <AverageRating shop={shop} />
+
                 <Distance shop={shop} />
               </li>
             ))}
@@ -96,18 +103,22 @@ function ShopCard({ shop, big = false }: { shop: RankedShop; big?: boolean }) {
           fill
           className="object-cover"
         />
+
         <span className="absolute top-3 left-3 rounded-full border border-espresso bg-cream px-3 py-1 font-heading font-bold">
           No. {shop.rank}
         </span>
       </div>
+
       <div className="flex flex-col gap-1.5 p-4">
         <h3
           className={`font-heading leading-tight font-semibold ${big ? "text-[22px]" : "text-[17px]"}`}
         >
           {shop.name}
         </h3>
+
         <div className="flex items-center justify-between">
           <AverageRating shop={shop} />
+
           <Distance shop={shop} />
         </div>
       </div>
@@ -122,6 +133,7 @@ function AverageRating({ shop }: { shop: RankedShop }) {
   return (
     <span className="flex items-center gap-1 text-sm font-bold">
       <Star className="size-3.5 fill-clay text-clay" aria-hidden />
+
       {shop.averageRating.toFixed(1)}
     </span>
   );

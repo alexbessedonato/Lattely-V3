@@ -43,6 +43,7 @@ export function Filters({
         <Label htmlFor="neighbourhood" className="font-semibold text-mocha">
           Neighbourhood
         </Label>
+
         <Select
           items={neighbourhoodOptions} // lets the trigger show the picked name, not its slug
           value={neighbourhood?.slug ?? null}
@@ -57,6 +58,7 @@ export function Filters({
           >
             <SelectValue />
           </SelectTrigger>
+
           <SelectContent>
             {neighbourhoodOptions.map((option) => (
               <SelectItem
@@ -75,6 +77,7 @@ export function Filters({
         <span id="radius-label" className="text-sm font-semibold text-mocha">
           How far will you walk?
         </span>
+
         <ToggleGroup
           aria-labelledby="radius-label"
           variant="outline"
@@ -96,6 +99,7 @@ export function Filters({
               {formatDistance(option)}
             </RadiusItem>
           ))}
+
           <RadiusItem
             value="anywhere"
             disabled={hasCentrePoint} // only available with no Centre point
