@@ -1,6 +1,7 @@
 import { Star } from "lucide-react";
 import Image from "next/image";
 import { Suspense } from "react";
+import { Filters } from "@/components/filters";
 import { formatDistance } from "@/lib/format-distance";
 import { getNeighbourhoods } from "@/lib/neighbourhoods";
 import { getRanking } from "@/lib/ranking";
@@ -29,7 +30,8 @@ async function RankedShops({
 }) {
   const { n, r } = await loadFilterParams(searchParams);
   // An unknown slug counts as no Centre point, so the Ranking covers all of Barcelona.
-  const neighbourhood = (await getNeighbourhoods()).find(
+  const neighbourhoods = await getNeighbourhoods();
+  const neighbourhood = neighbourhoods.find(
     (neighbourhood) => neighbourhood.slug === n,
   );
   const ranking = await getRanking(
@@ -43,6 +45,12 @@ async function RankedShops({
 
   return (
     <>
+      <Filters
+        neighbourhoods={neighbourhoods.map(({ name, slug }) => ({
+          name,
+          slug,
+        }))}
+      />
       <section aria-label="Top three" className="mt-4 flex flex-col gap-3.5">
         {first && <ShopCard shop={first} big />}
         <div className="grid grid-cols-2 gap-3.5">
