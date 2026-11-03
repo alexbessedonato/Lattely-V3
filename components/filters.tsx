@@ -44,7 +44,12 @@ export function Filters({
   const setLocation = useLocationStore((state) => state.setLocation);
 
   async function askForLocation() {
-    setLocation(await getBrowserLocation());
+    try {
+      setLocation(await getBrowserLocation());
+    } catch {
+      // Denied, or the browser couldn't find the Visitor: change nothing, so the current results stay.
+      return;
+    }
     // Already near=me (a shared link, or asking again): the URL is right, so don't add a Back step.
     if (!nearMe) setFilter({ n: null, near: "me", r: defaultRadiusM });
   }
