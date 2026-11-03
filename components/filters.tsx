@@ -66,7 +66,7 @@ export function Filters({
       className="mt-4 flex flex-col gap-3.5 rounded-[20px] border border-latte bg-paper p-4"
     >
       <div className="flex items-end gap-2">
-        <div className="flex flex-1 flex-col gap-2">
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
           <Label
             htmlFor="neighbourhood"
             className="font-semibold text-mocha mb-2"
