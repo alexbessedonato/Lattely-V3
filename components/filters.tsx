@@ -2,7 +2,7 @@
 
 import { MapPin } from "lucide-react";
 import { useQueryStates } from "nuqs";
-import { useEffect, useEffectEvent } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -42,16 +42,19 @@ export function Filters({
   const hasCentrePoint = neighbourhood !== undefined || nearMe;
   const location = useLocationStore((state) => state.location);
   const setLocation = useLocationStore((state) => state.setLocation);
+  const [locationFailed, setLocationFailed] = useState(false);
 
-  async function askForLocation() {
-    try {
-      setLocation(await getBrowserLocation());
-    } catch {
+  function askForLocation() {
+    getBrowserLocation().then(
+      (location) => {
+        setLocation(location);
+        setLocationFailed(false);
+        // Already near=me (a shared link, or asking again): the URL is right, so don't add a Back step.
+        if (!nearMe) setFilter({ n: null, near: "me", r: defaultRadiusM });
+      },
       // Denied, or the browser couldn't find the Visitor: change nothing, so the current results stay.
-      return;
-    }
-    // Already near=me (a shared link, or asking again): the URL is right, so don't add a Back step.
-    if (!nearMe) setFilter({ n: null, near: "me", r: defaultRadiusM });
+      () => setLocationFailed(true),
+    );
   }
 
   // Always calls this render's askForLocation, without being a reason for the effect to rerun.
@@ -126,6 +129,13 @@ export function Filters({
           Near me
         </Button>
       </div>
+
+      {locationFailed && (
+        // role="alert": screen readers read it out as soon as it appears
+        <p role="alert" className="text-sm font-semibold text-clay">
+          Couldn&apos;t get your location — pick a neighbourhood instead
+        </p>
+      )}
 
       <div className="flex flex-col gap-2">
         {/* Same spacing as the Neighbourhood Label: it's a span because it names a group, not one input */}
