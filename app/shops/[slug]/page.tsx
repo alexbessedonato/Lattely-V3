@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { buttonVariants } from "@/components/ui/button";
-import { fallbackImage } from "@/components/ranking";
+import { fallbackImage } from "@/lib/fallback-image";
 import { getShop } from "@/lib/shop";
 import { cn } from "@/lib/utils";
 

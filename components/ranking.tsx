@@ -2,6 +2,7 @@ import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
+import { fallbackImage } from "@/lib/fallback-image";
 import { formatDistance } from "@/lib/format-distance";
 import type { getRanking } from "@/lib/ranking";
 import {
@@ -155,10 +156,4 @@ function Distance({ shop }: { shop: RankedShop }) {
   return (
     <span className="text-sm text-mocha">{formatDistance(shop.distanceM)}</span>
   );
-}
-
-// shortcut: Shops have no photo column yet, so every Shop uses a fallback; add one when real photos exist.
-// Picked from the id, so a Shop always gets the same image.
-export function fallbackImage(shopId: number) {
-  return `/fallbacks/${(shopId % 6) + 1}.svg`;
 }
