@@ -1,8 +1,8 @@
-import { ChevronLeft, MapPin, Star } from "lucide-react";
+import { MapPin, Star } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { BackToRanking } from "@/components/back-to-ranking";
 import { buttonVariants } from "@/components/ui/button";
 import { fallbackImage } from "@/lib/fallback-image";
 import { getShop } from "@/lib/shop";
@@ -12,13 +12,7 @@ export default function ShopPage({ params }: PageProps<"/shops/[slug]">) {
   return (
     <main className="mx-auto w-full max-w-md px-4 pb-10">
       <header className="flex h-16 items-center">
-        <Link
-          href="/"
-          className="flex min-h-11 items-center gap-1.5 rounded-full border border-latte bg-paper pr-3.5 pl-2.5 font-semibold"
-        >
-          <ChevronLeft className="size-4.5" aria-hidden />
-          Ranking
-        </Link>
+        <BackToRanking />
       </header>
 
       <Suspense fallback={<p>Loading the Shop…</p>}>
