@@ -11,7 +11,12 @@ import {
 } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { formatDistance } from "@/lib/format-distance";
-import { filterParams, radiusOptionsM } from "@/lib/search-params";
+import {
+  defaultRadiusM,
+  filterParams,
+  radiusOptionsM,
+  resolveFilter,
+} from "@/lib/search-params";
 
 export function Filters({
   neighbourhoods,
@@ -22,12 +27,8 @@ export function Filters({
     shallow: false, // ask the server to redraw the Ranking for the new filter
     history: "push", // each change gets its own Back step
   });
-  // Same rules as the page: an unknown slug is no Centre point, and a Centre point with no Radius is 1 km.
-  const neighbourhood = neighbourhoods.find(
-    (neighbourhood) => neighbourhood.slug === n,
-  );
+  const { neighbourhood, radiusM } = resolveFilter(neighbourhoods, { n, r });
   const hasCentrePoint = neighbourhood !== undefined;
-  const radiusM = hasCentrePoint ? (r ?? 1000) : null;
   // null is "All of Barcelona": no Centre point.
   const neighbourhoodOptions = [
     { value: null, label: "All of Barcelona" },
@@ -48,8 +49,10 @@ export function Filters({
           items={neighbourhoodOptions} // lets the trigger show the picked name, not its slug
           value={neighbourhood?.slug ?? null}
           onValueChange={(slug) =>
-            // Picking a Neighbourhood starts at 1 km; "All of Barcelona" clears both.
-            setFilter(slug ? { n: slug, r: 1000 } : { n: null, r: null })
+            // Picking a Neighbourhood starts at the default Radius; "All of Barcelona" clears both.
+            setFilter(
+              slug ? { n: slug, r: defaultRadiusM } : { n: null, r: null },
+            )
           }
         >
           <SelectTrigger

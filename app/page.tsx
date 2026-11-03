@@ -10,6 +10,7 @@ import { getRanking } from "@/lib/ranking";
 import {
   loadFilterParams,
   type RadiusM,
+  resolveFilter,
   serializeFilterParams,
   widerRadius,
 } from "@/lib/search-params";
@@ -37,13 +38,11 @@ async function RankedShops({
 }: {
   searchParams: PageProps<"/">["searchParams"];
 }) {
-  const { n, r } = await loadFilterParams(searchParams);
-  // An unknown slug counts as no Centre point, so the Ranking covers all of Barcelona.
   const neighbourhoods = await getNeighbourhoods();
-  const neighbourhood = neighbourhoods.find(
-    (neighbourhood) => neighbourhood.slug === n,
+  const { neighbourhood, radiusM } = resolveFilter(
+    neighbourhoods,
+    await loadFilterParams(searchParams),
   );
-  const radiusM = r ?? 1000; // a Centre point with no Radius yet means 1 km
   const ranking = await getRanking(
     neighbourhood && { centrePoint: neighbourhood.centre, radiusM },
   );
