@@ -86,7 +86,7 @@ export function Filters({
           >
             <SelectTrigger
               id="neighbourhood"
-              className="h-11 w-full rounded-full bg-white pr-4 pl-4 text-base"
+              className="w-full rounded-full bg-white pr-4 pl-4 text-base data-[size=default]:h-11"
             >
               {/* With Near me there's no Neighbourhood, but null would read "All of Barcelona" */}
               <SelectValue>
