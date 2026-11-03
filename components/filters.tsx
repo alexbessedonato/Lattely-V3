@@ -51,7 +51,6 @@ export function Filters({
   // Always calls this render's askForLocation, without being a reason for the effect to rerun.
   const askOnOpen = useEffectEvent(() => askForLocation());
 
-  // A shared `near=me` link arrives with no location: ask the person opening it for their own.
   useEffect(() => {
     if (nearMe && !location) askOnOpen();
   }, [nearMe, location]);
@@ -68,7 +67,10 @@ export function Filters({
     >
       <div className="flex items-end gap-2">
         <div className="flex flex-1 flex-col gap-2">
-          <Label htmlFor="neighbourhood" className="font-semibold text-mocha">
+          <Label
+            htmlFor="neighbourhood"
+            className="font-semibold text-mocha mb-2"
+          >
             Neighbourhood
           </Label>
 
@@ -123,7 +125,7 @@ export function Filters({
         {/* Same spacing as the Neighbourhood Label: it's a span because it names a group, not one input */}
         <span
           id="radius-label"
-          className="text-sm leading-none font-semibold text-mocha"
+          className="text-sm leading-none font-semibold text-mocha mb-2"
         >
           How far will you walk?
         </span>

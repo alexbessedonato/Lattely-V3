@@ -7,5 +7,5 @@ export const useLocationStore = create<{
   setLocation: (location: Point) => void;
 }>((set) => ({
   location: null,
-  setLocation: (location) => set({ location }),
+  setLocation: (location) => set({ location: location }),
 }));
