@@ -52,8 +52,14 @@ export function Filters({
         // Already near=me (a shared link, or asking again): the URL is right, so don't add a Back step.
         if (!nearMe) setFilter({ n: null, near: "me", r: defaultRadiusM });
       },
-      // Denied, or the browser couldn't find the Visitor: change nothing, so the current results stay.
-      () => setLocationFailed(true),
+      // Denied, or the browser couldn't find the Visitor: the current results stay.
+      () => {
+        setLocationFailed(true);
+        // A shared near=me link has no results yet, so show all of Barcelona. Replace: Back shouldn't ask again.
+        if (nearMe && !location) {
+          setFilter({ near: null, r: null }, { history: "replace" });
+        }
+      },
     );
   }
 
