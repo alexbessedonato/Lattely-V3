@@ -86,14 +86,15 @@ export function Filters({
           <Select
             items={neighbourhoodOptions} // lets the trigger show the picked name, not its slug
             value={neighbourhood?.slug ?? null}
-            onValueChange={(slug) =>
+            onValueChange={(slug) => {
+              setLocationFailed(false); // they've picked, so the "pick a neighbourhood" message is done
               // Picking a Neighbourhood starts at the default Radius; "All of Barcelona" clears both.
               setFilter(
                 slug
                   ? { n: slug, near: null, r: defaultRadiusM }
                   : { n: null, near: null, r: null },
-              )
-            }
+              );
+            }}
           >
             <SelectTrigger
               id="neighbourhood"
