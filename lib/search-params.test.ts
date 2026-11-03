@@ -12,13 +12,13 @@ test("there is nothing wider than 5 km", () => {
 
 const neighbourhoods = [{ slug: "gracia" }, { slug: "el-born" }];
 
-test("a known slug is the Centre point, and a missing Radius means 1 km", () => {
+test("a known slug is the Centre point, and a missing Radius means 2 km", () => {
   expect(
     resolveFilter(neighbourhoods, { n: "gracia", near: null, r: null }),
   ).toEqual({
     neighbourhood: { slug: "gracia" },
     nearMe: false,
-    radiusM: 1000,
+    radiusM: 2000,
   });
   expect(
     resolveFilter(neighbourhoods, { n: "gracia", near: null, r: 500 }).radiusM,
@@ -35,15 +35,15 @@ test("an unknown or missing slug means no Centre point, so no Radius either", ()
   }
 });
 
-test("near=me is the Centre point, starting at 1 km", () => {
+test("near=me is the Centre point, starting at 2 km", () => {
   expect(
     resolveFilter(neighbourhoods, { n: null, near: "me", r: null }),
   ).toEqual({
     neighbourhood: undefined,
     nearMe: true,
-    radiusM: 1000,
+    radiusM: 2000,
   });
   expect(
-    resolveFilter(neighbourhoods, { n: null, near: "me", r: 2000 }).radiusM,
-  ).toBe(2000);
+    resolveFilter(neighbourhoods, { n: null, near: "me", r: 5000 }).radiusM,
+  ).toBe(5000);
 });

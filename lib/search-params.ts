@@ -11,7 +11,7 @@ export const radiusOptionsM = [500, 1000, 2000, 5000] as const;
 export type RadiusM = (typeof radiusOptionsM)[number];
 
 // The Radius a Centre point starts with when the URL has no `r`.
-export const defaultRadiusM = 1000;
+export const defaultRadiusM = 2000;
 
 // The next Radius option up, or null after 5 km (only "Anywhere" is wider, and it needs no Centre point).
 export function widerRadius(radiusM: RadiusM) {
