@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { getBrowserLocation } from "@/lib/browser-location";
 import { formatDistance } from "@/lib/format-distance";
 import { useLocationStore } from "@/lib/location-store";
 import {
@@ -31,21 +32,21 @@ export function Filters({
     shallow: false, // ask the server to redraw the Ranking for the new filter
     history: "push", // each change gets its own Back step
   });
+
   const { neighbourhood, nearMe, radiusM } = resolveFilter(neighbourhoods, {
     n,
     near,
     r,
   });
+
   const hasCentrePoint = neighbourhood !== undefined || nearMe;
   const location = useLocationStore((state) => state.location);
   const setLocation = useLocationStore((state) => state.setLocation);
 
-  function askForLocation() {
-    navigator.geolocation.getCurrentPosition(({ coords }) => {
-      setLocation({ x: coords.longitude, y: coords.latitude });
-      // Only `near=me` goes in the URL, so a shared link never shares the sender's location.
-      setFilter({ n: null, near: "me", r: radiusM ?? defaultRadiusM });
-    });
+  async function askForLocation() {
+    setLocation(await getBrowserLocation());
+    // Only `near=me` goes in the URL, so a shared link never shares the sender's location.
+    setFilter({ n: null, near: "me", r: radiusM ?? defaultRadiusM });
   }
 
   // A shared `near=me` link arrives with no location: ask the person opening it for their own.
