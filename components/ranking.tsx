@@ -55,19 +55,21 @@ export function Ranking({
 
           <ol>
             {rest.map((shop) => (
-              <li
-                key={shop.id}
-                className="flex min-h-15 items-center gap-3.5 border-b border-latte"
-              >
-                <span className="w-6 text-right font-heading text-[17px] font-semibold text-clay">
-                  {shop.rank}
-                </span>
+              <li key={shop.id} className="border-b border-latte">
+                <Link
+                  href={`/shops/${shop.slug}`}
+                  className="flex min-h-15 items-center gap-3.5"
+                >
+                  <span className="w-6 text-right font-heading text-[17px] font-semibold text-clay">
+                    {shop.rank}
+                  </span>
 
-                <span className="flex-1 font-semibold">{shop.name}</span>
+                  <span className="flex-1 font-semibold">{shop.name}</span>
 
-                <AverageRating shop={shop} />
+                  <AverageRating shop={shop} />
 
-                <Distance shop={shop} />
+                  <Distance shop={shop} />
+                </Link>
               </li>
             ))}
           </ol>
@@ -100,7 +102,10 @@ function NoShops({ centre, radiusM }: { centre: Centre; radiusM: RadiusM }) {
 
 function ShopCard({ shop, big = false }: { shop: RankedShop; big?: boolean }) {
   return (
-    <article className="overflow-hidden rounded-3xl border border-latte bg-paper">
+    <Link
+      href={`/shops/${shop.slug}`}
+      className="block overflow-hidden rounded-3xl border border-latte bg-paper"
+    >
       <div className={`relative ${big ? "h-55" : "h-30"}`}>
         <Image
           src={fallbackImage(shop.id)}
@@ -127,7 +132,7 @@ function ShopCard({ shop, big = false }: { shop: RankedShop; big?: boolean }) {
           <Distance shop={shop} />
         </div>
       </div>
-    </article>
+    </Link>
   );
 }
 
