@@ -119,8 +119,12 @@ export function Filters({
         </Button>
       </div>
 
-      <div className="flex flex-col gap-2">
-        <span id="radius-label" className="text-sm font-semibold text-mocha">
+      <div className="flex flex-col gap-1.5">
+        {/* Same spacing as the Neighbourhood Label: it's a span because it names a group, not one input */}
+        <span
+          id="radius-label"
+          className="text-sm leading-none font-semibold text-mocha"
+        >
           How far will you walk?
         </span>
 
