@@ -45,7 +45,8 @@ export function Filters({
 
   async function askForLocation() {
     setLocation(await getBrowserLocation());
-    setFilter({ n: null, near: "me", r: radiusM ?? defaultRadiusM });
+    // Already near=me (a shared link, or asking again): the URL is right, so don't add a Back step.
+    if (!nearMe) setFilter({ n: null, near: "me", r: defaultRadiusM });
   }
 
   // Always calls this render's askForLocation, without being a reason for the effect to rerun.
