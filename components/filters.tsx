@@ -2,7 +2,7 @@
 
 import { MapPin } from "lucide-react";
 import { useQueryStates } from "nuqs";
-import { useEffect } from "react";
+import { useEffect, useEffectEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -30,7 +30,7 @@ export function Filters({
 }) {
   const [{ n, near, r }, setFilter] = useQueryStates(filterParams, {
     shallow: false, // ask the server to redraw the Ranking for the new filter
-    history: "push", // each change gets its own Back step
+    history: "push",
   });
 
   const { neighbourhood, nearMe, radiusM } = resolveFilter(neighbourhoods, {
@@ -45,17 +45,17 @@ export function Filters({
 
   async function askForLocation() {
     setLocation(await getBrowserLocation());
-    // Only `near=me` goes in the URL, so a shared link never shares the sender's location.
     setFilter({ n: null, near: "me", r: radiusM ?? defaultRadiusM });
   }
 
+  // Always calls this render's askForLocation, without being a reason for the effect to rerun.
+  const askOnOpen = useEffectEvent(() => askForLocation());
+
   // A shared `near=me` link arrives with no location: ask the person opening it for their own.
   useEffect(() => {
-    if (nearMe && !location) askForLocation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- only when the URL or the location changes
+    if (nearMe && !location) askOnOpen();
   }, [nearMe, location]);
 
-  // null is "All of Barcelona": no Centre point.
   const neighbourhoodOptions = [
     { value: null, label: "All of Barcelona" },
     ...neighbourhoods.map(({ name, slug }) => ({ value: slug, label: name })),
