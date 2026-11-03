@@ -6,7 +6,7 @@ import { ratings, shops } from "@/db/schema";
 const PRIOR_WEIGHT = 5;
 
 // Longitude (x) and latitude (y), like the location columns.
-type Point = { x: number; y: number };
+export type Point = { x: number; y: number };
 
 // No filter means all of Barcelona (the "Anywhere" Radius).
 export async function getRanking(filter?: {
