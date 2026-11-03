@@ -112,7 +112,7 @@ export function Filters({
           variant="outline"
           aria-pressed={nearMe}
           onClick={askForLocation}
-          className="h-11 rounded-full bg-white px-4 text-base font-semibold aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:[&_svg]:text-primary-foreground"
+          className="h-11 rounded-full border-input bg-white px-4 text-base font-semibold aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:[&_svg]:text-primary-foreground"
         >
           <MapPin className="size-4.5 text-clay" aria-hidden />
           Near me
