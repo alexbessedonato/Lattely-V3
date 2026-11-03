@@ -67,7 +67,7 @@ export function Filters({
       className="mt-4 flex flex-col gap-3.5 rounded-[20px] border border-latte bg-paper p-4"
     >
       <div className="flex items-end gap-2">
-        <div className="flex flex-1 flex-col gap-1.5">
+        <div className="flex flex-1 flex-col gap-2">
           <Label htmlFor="neighbourhood" className="font-semibold text-mocha">
             Neighbourhood
           </Label>
@@ -119,7 +119,7 @@ export function Filters({
         </Button>
       </div>
 
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-2">
         {/* Same spacing as the Neighbourhood Label: it's a span because it names a group, not one input */}
         <span
           id="radius-label"
