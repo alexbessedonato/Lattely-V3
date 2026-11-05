@@ -2,6 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
 import { useUserContextStore } from "@/lib/user-context-store";
 
@@ -33,11 +36,11 @@ export function EmailForm() {
 
   return (
     <form onSubmit={sendCode} className="flex flex-col gap-3">
-      <label htmlFor="email" className="text-sm font-semibold text-mocha">
+      <Label htmlFor="email" className="font-semibold text-mocha">
         Email
-      </label>
+      </Label>
 
-      <input
+      <Input
         id="email"
         type="email"
         required
@@ -45,16 +48,16 @@ export function EmailForm() {
         placeholder="you@example.com"
         value={email}
         onChange={(event) => setEmail(event.target.value)}
-        className="h-13 rounded-full border border-input bg-white px-5"
+        className="h-13 rounded-full bg-white px-5 md:text-base"
       />
 
-      <button
+      <Button
         type="submit"
         disabled={pending}
-        className="h-13 rounded-full bg-espresso font-bold text-cream disabled:opacity-60"
+        className="h-13 rounded-full text-base font-bold"
       >
         {pending ? "Sending…" : "Send me a code"}
-      </button>
+      </Button>
 
       {failed ? (
         <p role="alert" className="text-sm text-destructive">

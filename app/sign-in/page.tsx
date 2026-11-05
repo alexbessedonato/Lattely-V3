@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { EmailForm } from "@/components/email-form";
 import { GoogleSignIn } from "@/components/google-sign-in";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Sign in · Lattely" };
 
@@ -13,7 +15,10 @@ export default function SignInPage() {
         <Link
           href="/"
           aria-label="Close and go back"
-          className="flex size-11 items-center justify-center rounded-full border border-latte bg-paper"
+          className={cn(
+            buttonVariants({ variant: "outline", size: "icon" }),
+            "size-11 rounded-full border-latte bg-paper",
+          )}
         >
           <X className="size-4.5" aria-hidden />
         </Link>

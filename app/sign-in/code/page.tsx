@@ -2,6 +2,8 @@ import { ChevronLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CodeForm } from "@/components/code-form";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Enter your code · Lattely" };
 
@@ -11,7 +13,10 @@ export default function CodePage() {
       <header className="flex h-16 items-center px-3">
         <Link
           href="/sign-in"
-          className="flex min-h-11 items-center gap-1.5 rounded-full border border-latte bg-paper px-3.5 font-semibold"
+          className={cn(
+            buttonVariants({ variant: "outline" }),
+            "h-11 gap-1.5 rounded-full border-latte bg-paper px-3.5 text-base font-semibold",
+          )}
         >
           <ChevronLeft className="size-4.5" aria-hidden />
           Back

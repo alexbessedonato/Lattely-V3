@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 
 export function GoogleSignIn() {
@@ -23,16 +24,17 @@ export function GoogleSignIn() {
 
   return (
     <div className="flex flex-col gap-2">
-      <button
+      <Button
         type="button"
+        variant="outline"
         onClick={signIn}
         disabled={pending}
-        className="flex h-13 items-center justify-center gap-2.5 rounded-full border border-input bg-white font-semibold disabled:opacity-60"
+        className="h-13 gap-2.5 rounded-full border-input bg-white text-base font-semibold"
       >
         <GoogleLogo />
 
         {pending ? "Opening Google…" : "Continue with Google"}
-      </button>
+      </Button>
 
       {failed && (
         <p role="alert" className="text-sm text-destructive">
@@ -46,7 +48,7 @@ export function GoogleSignIn() {
 // Google's own four-colour "G", which their brand rules ask sign-in buttons to show.
 function GoogleLogo() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden>
+    <svg viewBox="0 0 24 24" className="size-5" aria-hidden>
       <path
         d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z"
         fill="#4285F4"

@@ -3,7 +3,11 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
 import { useUserContextStore } from "@/lib/user-context-store";
 
 // Neon Auth's real code lifetime: a code's expiresAt is 300 s after it's made, though Neon's email says 10 minutes.
@@ -63,11 +67,11 @@ export function CodeForm() {
       </p>
 
       <form onSubmit={signIn} className="flex flex-col gap-3">
-        <label htmlFor="code" className="text-sm font-semibold text-mocha">
+        <Label htmlFor="code" className="font-semibold text-mocha">
           Code
-        </label>
+        </Label>
 
-        <input
+        <Input
           id="code"
           type="text"
           inputMode="numeric"
@@ -77,16 +81,16 @@ export function CodeForm() {
           maxLength={6}
           value={code}
           onChange={(event) => setCode(event.target.value.replace(/\D/g, ""))}
-          className="h-16 rounded-[20px] border-2 border-clay bg-white px-5 text-center font-heading text-3xl font-semibold tracking-[0.4em]"
+          className="h-16 rounded-[20px] border-2 border-clay bg-white px-5 text-center font-heading text-3xl font-semibold tracking-[0.4em] md:text-3xl"
         />
 
-        <button
+        <Button
           type="submit"
           disabled={pending}
-          className="h-13 rounded-full bg-espresso font-bold text-cream disabled:opacity-60"
+          className="h-13 rounded-full text-base font-bold"
         >
           {pending ? "Signing in…" : "Sign in"}
-        </button>
+        </Button>
 
         {message && (
           <p role="alert" className="text-sm text-mocha">
@@ -99,19 +103,23 @@ export function CodeForm() {
         <span>Didn&apos;t get it? Check your spam folder, or</span>
 
         <span className="flex flex-wrap items-center gap-x-1">
-          <button
+          <Button
             type="button"
+            variant="link"
             onClick={sendNewCode}
-            className="min-h-11 font-semibold text-espresso underline"
+            className="h-11 px-0 font-semibold underline"
           >
             send a new code
-          </button>
+          </Button>
 
           <span aria-hidden>·</span>
 
           <Link
             href="/sign-in"
-            className="flex min-h-11 items-center font-semibold text-espresso underline"
+            className={cn(
+              buttonVariants({ variant: "link" }),
+              "h-11 px-0 font-semibold underline",
+            )}
           >
             use a different email
           </Link>
