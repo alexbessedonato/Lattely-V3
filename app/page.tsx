@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { Account } from "@/components/account";
 import { Filters } from "@/components/filters";
 import { NearMeRanking } from "@/components/near-me-ranking";
 import { Ranking } from "@/components/ranking";
@@ -9,9 +10,14 @@ import { loadFilterParams, resolveFilter } from "@/lib/search-params";
 export default function Home({ searchParams }: PageProps<"/">) {
   return (
     <main className="mx-auto w-full max-w-md px-5 pb-10">
-      <h1 className="flex h-16 items-center font-heading text-2xl font-bold">
-        Lattely
-      </h1>
+      <header className="flex h-16 items-center justify-between">
+        <h1 className="font-heading text-2xl font-bold">Lattely</h1>
+
+        {/* Keeps the space while the session is read, so the header doesn't jump */}
+        <Suspense fallback={<div className="size-11" />}>
+          <Account />
+        </Suspense>
+      </header>
 
       <Suspense fallback={<p>Loading Shops…</p>}>
         <RankedShops searchParams={searchParams} />

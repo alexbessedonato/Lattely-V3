@@ -2,6 +2,7 @@ import { MapPin, Star } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { Account } from "@/components/account";
 import { BackToRanking } from "@/components/back-to-ranking";
 import { buttonVariants } from "@/components/ui/button";
 import { fallbackImage } from "@/lib/fallback-image";
@@ -11,8 +12,12 @@ import { cn } from "@/lib/utils";
 export default function ShopPage({ params }: PageProps<"/shops/[slug]">) {
   return (
     <main className="mx-auto w-full max-w-md px-4 pb-10">
-      <header className="flex h-16 items-center">
+      <header className="flex h-16 items-center justify-between">
         <BackToRanking />
+
+        <Suspense fallback={<div className="size-11" />}>
+          <Account />
+        </Suspense>
       </header>
 
       <Suspense fallback={<p>Loading the Shop…</p>}>
