@@ -34,6 +34,8 @@ yarn-error.log*
 .env*
 # Local Docker database URL only, no secrets; Next.js loads it in `next dev`.
 !.env.development
+# The production Neon Auth URL only, no secrets; Next.js loads it in `next build`.
+!.env.production
 
 # vercel
 .vercel
