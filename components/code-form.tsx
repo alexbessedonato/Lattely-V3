@@ -18,6 +18,7 @@ export function CodeForm() {
   const email = useUserContextStore((state) => state.email);
   const [code, setCode] = useState("");
   const [pending, setPending] = useState(false);
+  const [resending, setResending] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
   // The email is only in memory, so after a reload it's gone: start again from /sign-in.
@@ -27,6 +28,7 @@ export function CodeForm() {
 
   if (email === null) return null;
 
+  // Arrow functions, not `function`, so TypeScript knows `email` isn't null inside them.
   const signIn = async (event: React.FormEvent) => {
     event.preventDefault();
     setPending(true);
@@ -45,11 +47,13 @@ export function CodeForm() {
   };
 
   const sendNewCode = async () => {
+    setResending(true); // one email per tap, however many times it's tapped
     setMessage(null);
     const { error } = await authClient.emailOtp.sendVerificationOtp({
       email,
       type: "sign-in",
     });
+    setResending(false);
     setCode("");
     setMessage(
       error ? "Couldn't send a new code. Please try again." : "New code sent.",
@@ -107,9 +111,10 @@ export function CodeForm() {
             type="button"
             variant="link"
             onClick={sendNewCode}
+            disabled={resending}
             className="h-11 px-0 font-semibold underline"
           >
-            send a new code
+            {resending ? "sending…" : "send a new code"}
           </Button>
 
           <span aria-hidden>·</span>
