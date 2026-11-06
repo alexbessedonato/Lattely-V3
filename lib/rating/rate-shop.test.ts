@@ -13,10 +13,10 @@ afterAll(() => db.$client.end());
 
 const member = { id: "member-1" };
 
-async function addShop() {
+async function addShop(status: "live" | "closed" = "live") {
   const [shop] = await db
     .insert(shops)
-    .values({ name: "shop", slug: "shop", address: "Carrer 1", status: "live" })
+    .values({ name: "shop", slug: "shop", address: "Carrer 1", status })
     .returning();
   return shop;
 }
@@ -30,6 +30,13 @@ test("rating a Shop twice replaces the first Rating", async () => {
   expect(await db.select().from(ratings)).toMatchObject([
     { memberId: "member-1", shopId: shop.id, stars: 5 },
   ]);
+});
+
+test("a Shop that isn't live can't be rated", async () => {
+  const shop = await addShop("closed");
+
+  await expect(rateShop(member, shop.id, 5)).rejects.toThrow();
+  expect(await db.select().from(ratings)).toEqual([]);
 });
 
 test.each([0, 6, 2.5])("%s stars are refused", async (stars) => {
