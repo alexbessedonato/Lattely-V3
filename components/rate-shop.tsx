@@ -4,6 +4,10 @@ import { getMemberRating } from "@/lib/rating/member-rating";
 import { rateShopAction } from "@/lib/rating/rate-shop-action";
 import { cn } from "cn";
 
+// The card's look, shared with RateShopSkeleton so the two stay exactly the same size.
+export const rateShopCard =
+  "mx-1 mt-6 flex flex-col gap-3 rounded-3xl border border-latte bg-paper px-5 py-5.5";
+
 // The "How was your cup?" card: five star buttons and the Member's current Rating.
 // It reads the session cookie, so the page shows it inside <Suspense>.
 export async function RateShop({ shopId }: { shopId: number }) {
@@ -11,10 +15,7 @@ export async function RateShop({ shopId }: { shopId: number }) {
   const memberStars = member ? await getMemberRating(member, shopId) : null;
 
   return (
-    <section
-      aria-label="Your rating"
-      className="mx-1 mt-6 flex flex-col gap-3 rounded-3xl border border-latte bg-paper px-5 py-5.5"
-    >
+    <section aria-label="Your rating" className={rateShopCard}>
       <h2 className="font-heading text-[22px] font-semibold">
         How was your cup?
       </h2>
@@ -32,7 +33,7 @@ export async function RateShop({ shopId }: { shopId: number }) {
             type="submit"
             name="stars"
             value={stars}
-            aria-label={`${stars} ${stars === 1 ? "star" : "stars"}`}
+            aria-label={starCount(stars)}
             aria-pressed={stars === memberStars}
             className="flex size-13 items-center justify-center rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           >
@@ -51,8 +52,13 @@ export async function RateShop({ shopId }: { shopId: number }) {
       <p className="text-sm text-mocha">
         {memberStars === null
           ? "Tap a star to rate it."
-          : `You gave it ${memberStars} ${memberStars === 1 ? "star" : "stars"}. Changed your mind? Tap again.`}
+          : `You gave it ${starCount(memberStars)}. Changed your mind? Tap again.`}
       </p>
     </section>
   );
+}
+
+// "1 star", "4 stars".
+function starCount(stars: number) {
+  return `${stars} ${stars === 1 ? "star" : "stars"}`;
 }

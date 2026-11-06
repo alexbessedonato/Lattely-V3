@@ -1,12 +1,10 @@
+import { rateShopCard } from "@/components/rate-shop";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Stands in for <RateShop> while it loads: same card, same sizes, so nothing moves when it arrives.
 export function RateShopSkeleton() {
   return (
-    <div
-      aria-hidden
-      className="mx-1 mt-6 flex flex-col gap-3 rounded-3xl border border-latte bg-paper px-5 py-5.5"
-    >
+    <div aria-hidden className={rateShopCard}>
       {/* "How was your cup?" */}
       <Skeleton className="h-8.25 w-48" />
 

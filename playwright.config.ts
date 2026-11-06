@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+import { dockerDatabaseUrl } from "./test/fresh-database.ts";
 
 // The development Neon Auth URL, and from .env.local the cookie secret and the test Member's login.
 process.loadEnvFile(".env.development");
@@ -15,7 +16,7 @@ export default defineConfig({
     port,
     timeout: 180_000,
     env: {
-      DATABASE_URL: "postgres://postgres:postgres@localhost:5433/lattely_e2e",
+      DATABASE_URL: dockerDatabaseUrl("lattely_e2e"),
       // Set here, so `next build` uses the development Neon Auth and not the production one in .env.production.
       NEON_AUTH_BASE_URL: process.env.NEON_AUTH_BASE_URL!,
     },
