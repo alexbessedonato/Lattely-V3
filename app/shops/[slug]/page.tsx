@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { Account } from "@/components/account";
 import { BackToRanking } from "@/components/back-to-ranking";
+import { RateShop } from "@/components/rate-shop";
 import { buttonVariants } from "@/components/ui/button";
 import { fallbackImage } from "@/lib/fallback-image";
 import { getShop } from "@/lib/ranking/shop";
@@ -107,6 +108,10 @@ async function ShopDetail({
           </a>
         )}
       </section>
+
+      <Suspense>
+        <RateShop shopId={shop.id} />
+      </Suspense>
     </>
   );
 }
