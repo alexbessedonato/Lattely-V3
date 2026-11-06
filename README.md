@@ -22,6 +22,7 @@ After a restart, run `docker compose up -d` again before `pnpm dev`. The data is
 | ------------------ | ----------------------------------------------------------------------------- |
 | `pnpm dev`         | Run the app, using the dev database `lattely` (URL in `.env.development`)     |
 | `pnpm test`        | Start Docker if needed, rebuild the empty `lattely_test` database, run Vitest |
+| `pnpm test:e2e`    | Build the app on a fresh `lattely_e2e` database and run the Playwright test   |
 | `pnpm typecheck`   | Check TypeScript                                                              |
 | `pnpm lint`        | Run ESLint                                                                    |
 | `pnpm format`      | Format all files with Prettier                                                |
@@ -31,7 +32,9 @@ After a restart, run `docker compose up -d` again before `pnpm dev`. The data is
 
 ## Neon (deployed databases)
 
-The deployed app uses the Neon project `Lattely-V3` (Frankfurt), which has two branches: `production` for the live site and `development` for Vercel previews. Local dev and tests never touch Neon.
+The deployed app uses the Neon project `Lattely-V3` (Frankfurt), which has two branches: `production` for the live site and `development` for Vercel previews. Local dev and tests keep their data in Docker, but signing in always goes through the `development` branch's Neon Auth.
+
+The Playwright test signs in as a test Member, `e2e@lattely.test`, with a password. Its login lives in `.env.local` as `E2E_MEMBER_EMAIL` and `E2E_MEMBER_PASSWORD`, which aren't committed; ask for them, or make your own test Member with Neon Auth's `/sign-up/email`.
 
 After adding a migration, apply it to both branches, `production` before pushing the code that needs it:
 
