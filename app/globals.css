@@ -71,7 +71,7 @@
   --muted-foreground: #6e5a4b;
   --accent: #e6dacb;
   --accent-foreground: #2b1d14;
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: #9b1c1c; /* darker than shadcn's red, so error text is readable on cream */
   --border: #e6dacb;
   --input: #d9c8b4; /* form controls get a slightly darker edge than cards, as in the design */
   --ring: #8f4420;

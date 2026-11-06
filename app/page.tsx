@@ -1,11 +1,14 @@
+import Link from "next/link";
 import { Suspense } from "react";
 import { Account } from "@/components/account";
+import { buttonVariants } from "@/components/ui/button";
 import { Filters } from "@/components/filters";
 import { NearMeRanking } from "@/components/near-me-ranking";
 import { Ranking } from "@/components/ranking";
 import { getNeighbourhoods } from "@/lib/ranking/neighbourhoods";
 import { getRanking } from "@/lib/ranking/ranking";
 import { loadFilterParams, resolveFilter } from "@/lib/ranking/search-params";
+import { cn } from "cn";
 
 export default function Home({ searchParams }: PageProps<"/">) {
   return (
@@ -22,6 +25,22 @@ export default function Home({ searchParams }: PageProps<"/">) {
       <Suspense fallback={<p>Loading Shops…</p>}>
         <RankedShops searchParams={searchParams} />
       </Suspense>
+
+      <footer className="flex items-center justify-between gap-3 pt-7">
+        <span className="font-heading text-lg font-semibold">
+          Know a gem we&apos;re missing?
+        </span>
+
+        <Link
+          href="/submit"
+          className={cn(
+            buttonVariants({ variant: "outline" }),
+            "h-11 shrink-0 rounded-full border-espresso px-4 text-[15px] font-semibold",
+          )}
+        >
+          Submit it
+        </Link>
+      </footer>
     </main>
   );
 }
