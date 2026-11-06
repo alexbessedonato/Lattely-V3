@@ -8,7 +8,7 @@ import { cn } from "cn";
 // It reads the session cookie, so the page shows it inside <Suspense>.
 export async function RateShop({ shopId }: { shopId: number }) {
   const member = await getMember();
-  const given = member ? await getMemberRating(member, shopId) : null;
+  const memberStars = member ? await getMemberRating(member, shopId) : null;
 
   return (
     <section
@@ -33,7 +33,7 @@ export async function RateShop({ shopId }: { shopId: number }) {
             name="stars"
             value={stars}
             aria-label={`${stars} ${stars === 1 ? "star" : "stars"}`}
-            aria-pressed={stars === given}
+            aria-pressed={stars === memberStars}
             className="flex size-13 items-center justify-center rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             <Star
@@ -41,7 +41,7 @@ export async function RateShop({ shopId }: { shopId: number }) {
               strokeWidth={1.5}
               className={cn(
                 "size-9 text-clay",
-                given !== null && stars <= given && "fill-clay",
+                memberStars !== null && stars <= memberStars && "fill-clay",
               )}
             />
           </button>
@@ -49,9 +49,9 @@ export async function RateShop({ shopId }: { shopId: number }) {
       </form>
 
       <p className="text-sm text-mocha">
-        {given === null
+        {memberStars === null
           ? "Tap a star to rate it."
-          : `You gave it ${given} ${given === 1 ? "star" : "stars"}. Changed your mind? Tap again.`}
+          : `You gave it ${memberStars} ${memberStars === 1 ? "star" : "stars"}. Changed your mind? Tap again.`}
       </p>
     </section>
   );

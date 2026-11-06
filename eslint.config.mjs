@@ -8,7 +8,7 @@ const eslintConfig = defineConfig([
   ...nextTs,
   {
     // Our own components only: shadcn's files in components/ui stay as shadcn wrote them.
-    files: ["app/**/*.tsx", "components/*.tsx"],
+    files: ["app/**/*.tsx", "components/*.tsx", "components/skeletons/*.tsx"],
     plugins: { "@stylistic": stylistic },
     rules: {
       // A blank line between sibling JSX elements, so blocks don't run together. `pnpm lint --fix` adds them.
