@@ -10,7 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 
 // The round button with the Member's initial, which opens a menu to sign out.
 export function AccountMenu({ name, email }: { name: string; email: string }) {

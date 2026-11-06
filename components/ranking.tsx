@@ -4,12 +4,12 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { fallbackImage } from "@/lib/fallback-image";
 import { formatDistance } from "@/lib/format-distance";
-import type { getRanking } from "@/lib/ranking";
+import type { getRanking } from "@/lib/ranking/ranking";
 import {
   type RadiusM,
   serializeFilterParams,
   widerRadius,
-} from "@/lib/search-params";
+} from "@/lib/ranking/search-params";
 import { cn } from "@/lib/utils";
 
 export type RankedShop = Awaited<ReturnType<typeof getRanking>>[number];

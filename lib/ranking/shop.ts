@@ -1,4 +1,4 @@
-import { getRanking } from "@/lib/ranking";
+import { getRanking } from "@/lib/ranking/ranking";
 
 // A live Shop with its Barcelona-wide Rank, or null if there's no live Shop with this slug.
 export async function getShop(slug: string) {

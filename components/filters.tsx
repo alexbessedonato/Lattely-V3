@@ -13,15 +13,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { getBrowserLocation } from "@/lib/browser-location";
+import { getBrowserLocation } from "@/lib/location/browser-location";
 import { formatDistance } from "@/lib/format-distance";
-import { useLocationStore } from "@/lib/location-store";
+import { useLocationStore } from "@/lib/location/location-store";
 import {
   defaultRadiusM,
   filterParams,
   radiusOptionsM,
   resolveFilter,
-} from "@/lib/search-params";
+} from "@/lib/ranking/search-params";
 
 export function Filters({
   neighbourhoods,

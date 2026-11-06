@@ -1,7 +1,7 @@
 "use server";
 
-import { getRanking, type Point } from "@/lib/ranking";
-import { type RadiusM, radiusOptionsM } from "@/lib/search-params";
+import { getRanking, type Point } from "@/lib/ranking/ranking";
+import { type RadiusM, radiusOptionsM } from "@/lib/ranking/search-params";
 
 // A Server Action: the browser calls it with a POST, so the location travels in the request body,
 // never in the URL. It's used for this one request and never logged or stored (ADR-0002).

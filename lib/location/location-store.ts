@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Point } from "@/lib/ranking";
+import type { Point } from "@/lib/ranking/ranking";
 
 // The Visitor's own location. It lives only in this browser tab: never in the URL, never stored (ADR-0002).
 export const useLocationStore = create<{

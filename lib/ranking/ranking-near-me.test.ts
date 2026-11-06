@@ -1,7 +1,7 @@
 import { afterAll, beforeEach, expect, test } from "vitest";
 import { db } from "@/db/client";
 import { ratings, shops } from "@/db/schema";
-import { getRankingNearMe } from "@/lib/ranking-near-me";
+import { getRankingNearMe } from "@/lib/ranking/ranking-near-me";
 
 beforeEach(async () => {
   await db.delete(ratings);

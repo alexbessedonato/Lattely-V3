@@ -3,9 +3,9 @@ import { Account } from "@/components/account";
 import { Filters } from "@/components/filters";
 import { NearMeRanking } from "@/components/near-me-ranking";
 import { Ranking } from "@/components/ranking";
-import { getNeighbourhoods } from "@/lib/neighbourhoods";
-import { getRanking } from "@/lib/ranking";
-import { loadFilterParams, resolveFilter } from "@/lib/search-params";
+import { getNeighbourhoods } from "@/lib/ranking/neighbourhoods";
+import { getRanking } from "@/lib/ranking/ranking";
+import { loadFilterParams, resolveFilter } from "@/lib/ranking/search-params";
 
 export default function Home({ searchParams }: PageProps<"/">) {
   return (

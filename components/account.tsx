@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AccountMenu } from "@/components/account-menu";
 import { buttonVariants } from "@/components/ui/button";
-import { getMember } from "@/lib/auth-server";
+import { getMember } from "@/lib/auth/auth-server";
 import { cn } from "@/lib/utils";
 
 // "Sign in" for a Visitor, the account button for a Member.

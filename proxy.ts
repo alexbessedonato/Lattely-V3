@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth-server";
+import { auth } from "@/lib/auth/auth-server";
 
 // Coming back from Google, the URL carries a one-time neon_auth_session_verifier. This swaps it
 // for the session cookie, then reloads the page without it. Google always returns to "/", and

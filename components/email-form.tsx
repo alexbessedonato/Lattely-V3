@@ -5,8 +5,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { authClient } from "@/lib/auth-client";
-import { useUserContextStore } from "@/lib/user-context-store";
+import { authClient } from "@/lib/auth/auth-client";
+import { useUserContextStore } from "@/lib/auth/user-context-store";
 
 export function EmailForm() {
   const router = useRouter();

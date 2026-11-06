@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 import { cn } from "@/lib/utils";
-import { useUserContextStore } from "@/lib/user-context-store";
+import { useUserContextStore } from "@/lib/auth/user-context-store";
 
 // Neon Auth's real code lifetime: a code's expiresAt is 300 s after it's made, though Neon's email says 10 minutes.
 const CODE_LIFETIME_MINUTES = 5;

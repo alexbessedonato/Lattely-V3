@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { resolveFilter, widerRadius } from "@/lib/search-params";
+import { resolveFilter, widerRadius } from "@/lib/ranking/search-params";
 
 test("widening goes up one Radius option at a time", () => {
   expect(widerRadius(500)).toBe(1000);

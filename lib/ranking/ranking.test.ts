@@ -1,7 +1,7 @@
 import { afterAll, beforeEach, expect, test } from "vitest";
 import { db } from "@/db/client";
 import { ratings, shops } from "@/db/schema";
-import { getRanking } from "@/lib/ranking";
+import { getRanking } from "@/lib/ranking/ranking";
 
 // Every test starts from no Shops and no Ratings.
 beforeEach(async () => {
