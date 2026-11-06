@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { Account } from "@/components/account";
 import { BackToRanking } from "@/components/back-to-ranking";
 import { RateShop } from "@/components/rate-shop";
+import { RateShopSkeleton } from "@/components/skeletons/rate-shop-skeleton";
 import { buttonVariants } from "@/components/ui/button";
 import { fallbackImage } from "@/lib/fallback-image";
 import { getShop } from "@/lib/ranking/shop";
@@ -109,7 +110,7 @@ async function ShopDetail({
         )}
       </section>
 
-      <Suspense>
+      <Suspense fallback={<RateShopSkeleton />}>
         <RateShop shopId={shop.id} />
       </Suspense>
     </>
