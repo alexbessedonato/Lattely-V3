@@ -10,7 +10,7 @@ import {
   serializeFilterParams,
   widerRadius,
 } from "@/lib/ranking/search-params";
-import { cn } from "@/lib/utils";
+import { cn } from "cn";
 
 export type RankedShop = Awaited<ReturnType<typeof getRanking>>[number];
 

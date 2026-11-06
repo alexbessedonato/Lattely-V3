@@ -7,7 +7,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth/auth-client";
-import { cn } from "@/lib/utils";
+import { cn } from "cn";
 import { useUserContextStore } from "@/lib/auth/user-context-store";
 
 // Neon Auth's real code lifetime: a code's expiresAt is 300 s after it's made, though Neon's email says 10 minutes.

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { AccountMenu } from "@/components/account-menu";
 import { buttonVariants } from "@/components/ui/button";
 import { getMember } from "@/lib/auth/auth-server";
-import { cn } from "@/lib/utils";
+import { cn } from "cn";
 
 // "Sign in" for a Visitor, the account button for a Member.
 // It reads the session cookie, so pages show it inside <Suspense> and the rest of the page doesn't wait.

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CodeForm } from "@/components/code-form";
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "cn";
 
 export const metadata: Metadata = { title: "Enter your code · Lattely" };
 

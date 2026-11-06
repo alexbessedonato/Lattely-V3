@@ -7,7 +7,7 @@ import { BackToRanking } from "@/components/back-to-ranking";
 import { buttonVariants } from "@/components/ui/button";
 import { fallbackImage } from "@/lib/fallback-image";
 import { getShop } from "@/lib/ranking/shop";
-import { cn } from "@/lib/utils";
+import { cn } from "cn";
 
 export default function ShopPage({ params }: PageProps<"/shops/[slug]">) {
   return (

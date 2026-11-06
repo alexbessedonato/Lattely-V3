@@ -4,7 +4,7 @@ import Link from "next/link";
 import { EmailForm } from "@/components/email-form";
 import { GoogleSignIn } from "@/components/google-sign-in";
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "cn";
 
 export const metadata: Metadata = { title: "Sign in · Lattely" };
 
