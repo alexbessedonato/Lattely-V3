@@ -34,7 +34,7 @@ async function freeSlug(name: string) {
   const slug =
     name
       .normalize("NFD") // splits "é" into "e" + its accent…
-      .replace(/[̀-ͯ]/g, "") // …so the accent can be dropped
+      .replace(/\p{Diacritic}/gu, "") // …so the accent can be dropped
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "") || "shop"; // a name with no letters or digits still gets a slug
