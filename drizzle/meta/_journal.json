@@ -36,6 +36,13 @@
       "when": 1794559372492,
       "tag": "0004_add-submitted-by",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794564703359,
+      "tag": "0005_create-admins",
+      "breakpoints": true
     }
   ]
 }

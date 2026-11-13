@@ -38,6 +38,12 @@ export const neighbourhoods = pgTable("neighbourhoods", {
   centre: geometry({ type: "point", mode: "xy", srid: 4326 }).notNull(),
 });
 
+// The Members who are Admins. Added by hand: INSERT INTO admins VALUES ('<member id>');
+export const admins = pgTable("admins", {
+  // shortcut: plain text like ratings.memberId; make it a foreign key with that one.
+  memberId: text("member_id").primaryKey(),
+});
+
 export const ratings = pgTable(
   "ratings",
   {
