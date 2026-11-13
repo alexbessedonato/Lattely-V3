@@ -4,15 +4,13 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { fallbackImage } from "@/lib/fallback-image";
 import { formatDistance } from "@/lib/format-distance";
-import type { getRanking } from "@/lib/ranking/ranking";
 import {
-  type RadiusM,
   serializeFilterParams,
   widerRadius,
 } from "@/lib/ranking/search-params";
+import type { RadiusM } from "@/lib/ranking/types/radius-m";
+import type { RankedShop } from "@/lib/ranking/types/ranked-shop";
 import { cn } from "cn";
-
-export type RankedShop = Awaited<ReturnType<typeof getRanking>>[number];
 
 // The Centre point as it's written in the URL, so the "widen" link can keep it.
 type Centre = { n: string } | { near: "me" };

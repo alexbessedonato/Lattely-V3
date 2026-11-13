@@ -1,12 +1,10 @@
 import { and, asc, count, desc, eq, getTableColumns, sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { ratings, shops } from "@/db/schema";
+import type { Point } from "@/lib/ranking/types/point";
 
 // How many "average" Ratings every Shop starts with, so one 5-star Rating can't top the Ranking.
 const PRIOR_WEIGHT = 5;
-
-// Longitude (x) and latitude (y), like the location columns.
-export type Point = { x: number; y: number };
 
 // No filter means all of Barcelona (the "Anywhere" Radius).
 export async function getRanking(filter?: {

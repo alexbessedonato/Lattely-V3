@@ -22,5 +22,3 @@ export const submissionSchema = z.object({
     )
     .transform((link) => link || null),
 });
-
-export type Submission = z.infer<typeof submissionSchema>;

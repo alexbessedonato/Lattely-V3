@@ -2,10 +2,11 @@
 
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
-import { Ranking, type RankedShop } from "@/components/ranking";
+import { Ranking } from "@/components/ranking";
 import { useLocationStore } from "@/lib/location/location-store";
 import { getRankingNearMe } from "@/lib/ranking/ranking-near-me";
 import { defaultRadiusM, filterParams } from "@/lib/ranking/search-params";
+import type { RankedShop } from "@/lib/ranking/types/ranked-shop";
 
 // The Ranking around the Visitor's own location. Only this browser knows the location,
 // so it sends it to the server with the request and draws what comes back.

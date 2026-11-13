@@ -4,10 +4,8 @@ import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  submitShopAction,
-  type SubmitShopState,
-} from "@/lib/submission/submit-shop-action";
+import { submitShopAction } from "@/lib/submission/submit-shop-action";
+import type { SubmitShopState } from "@/lib/submission/types/submit-shop-state";
 
 const empty: SubmitShopState = {
   values: { name: "", address: "", instagramOrWebsite: "" },

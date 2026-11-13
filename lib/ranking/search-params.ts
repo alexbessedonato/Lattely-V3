@@ -5,10 +5,10 @@ import {
   parseAsString,
   parseAsStringLiteral,
 } from "nuqs/server";
+import type { RadiusM } from "@/lib/ranking/types/radius-m";
 
 // The Radius options in metres. "Anywhere" has no number: it's no `r` and no Centre point.
 export const radiusOptionsM = [500, 1000, 2000, 5000] as const;
-export type RadiusM = (typeof radiusOptionsM)[number];
 
 // The Radius a Centre point starts with when the URL has no `r`.
 export const defaultRadiusM = 2000;

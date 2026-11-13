@@ -4,16 +4,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getMember } from "@/lib/auth/auth-server";
 import { submissionSchema } from "@/lib/submission/submission-schema";
-
-// What the form shows after a try: the text the Member typed (so nothing is lost) and a message per field.
-export type SubmitShopState = {
-  values: { name: string; address: string; instagramOrWebsite: string };
-  errors: {
-    name?: string[];
-    address?: string[];
-    instagramOrWebsite?: string[];
-  };
-};
+import type { SubmitShopState } from "@/lib/submission/types/submit-shop-state";
 
 // A Server Action: the /submit form posts here. useActionState passes in the last state first.
 export async function submitShopAction(

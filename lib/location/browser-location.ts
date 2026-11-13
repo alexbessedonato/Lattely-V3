@@ -1,4 +1,4 @@
-import type { Point } from "@/lib/ranking/ranking";
+import type { Point } from "@/lib/ranking/types/point";
 
 // The browser's location API answers through callbacks; this turns it into a Promise you can await.
 // It rejects if the Visitor says no or the browser can't find them.
