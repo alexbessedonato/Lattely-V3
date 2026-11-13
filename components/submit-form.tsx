@@ -73,6 +73,12 @@ export function SubmitForm() {
         />
       </Field>
 
+      {state.errors.form && (
+        <p role="alert" className="text-sm font-semibold text-destructive">
+          {state.errors.form[0]}
+        </p>
+      )}
+
       <Button
         type="submit"
         disabled={pending}

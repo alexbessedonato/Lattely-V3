@@ -25,6 +25,9 @@ export const shops = pgTable("shops", {
   status: shopStatus().notNull(),
   // Longitude (x) and latitude (y). Null until we know where the Shop is; such Shops only show with no Centre point.
   location: geometry({ type: "point", mode: "xy", srid: 4326 }),
+  // The id of the Member who submitted it. Null for Shops we added ourselves.
+  // shortcut: plain text like ratings.memberId; make it a foreign key with that one.
+  submittedBy: text("submitted_by"),
 });
 
 export const neighbourhoods = pgTable("neighbourhoods", {

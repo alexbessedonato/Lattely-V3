@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getMember } from "@/lib/auth/auth-server";
 import { submissionSchema } from "@/lib/submission/submission-schema";
+import { submitShop } from "@/lib/submission/submit-shop";
 import type { SubmitShopState } from "@/lib/submission/types/submit-shop-state";
 
 // A Server Action: the /submit form posts here. useActionState passes in the last state first.
@@ -25,6 +26,9 @@ export async function submitShopAction(
     return { values, errors: z.flattenError(result.error).fieldErrors };
   }
 
-  // shortcut: checkpoint 2 only validates; checkpoint 3 saves it with submitShop and goes to My submissions.
-  return { values, errors: {} };
+  const refusal = await submitShop(member, result.data); // result.data is Zod's tidied version
+  if (refusal) return { values, errors: { form: [refusal] } };
+
+  // shortcut: /my-submissions is checkpoint 4, so this lands on a 404 until it exists.
+  redirect("/my-submissions");
 }
