@@ -57,7 +57,7 @@ async function MembersOnly({
   searchParams: PageProps<"/my-submissions">["searchParams"];
 }) {
   const member = await getMember();
-  if (!member) redirect("/sign-in");
+  if (!member) redirect("/sign-in?next=/my-submissions");
 
   const submissions = await getMySubmissions(member);
   // The Server Action sends Members here with ?submitted=1 right after a Submission is saved.

@@ -2,7 +2,6 @@
 
 import { ListChecks, LogOut } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,11 +14,10 @@ import { authClient } from "@/lib/auth/auth-client";
 
 // The round button with the Member's initial, which opens a menu with My submissions and Sign out.
 export function AccountMenu({ name, email }: { name: string; email: string }) {
-  const router = useRouter();
-
   async function signOut() {
     await authClient.signOut();
-    router.refresh(); // rebuild the server header without the session, so it shows "Sign in" again
+    // A full reload, so no page kept from while signed in (like the /submit form) can show again.
+    window.location.reload();
   }
 
   return (

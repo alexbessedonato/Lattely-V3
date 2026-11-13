@@ -13,7 +13,7 @@ export async function submitShopAction(
   formData: FormData,
 ): Promise<SubmitShopState> {
   const member = await getMember();
-  if (!member) redirect("/sign-in"); // only Members can submit
+  if (!member) redirect("/sign-in?next=/submit"); // only Members can submit
 
   const values = {
     name: String(formData.get("name") ?? ""),

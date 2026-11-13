@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,10 @@ import { useUserContextStore } from "@/lib/auth/user-context-store";
 export function EmailForm() {
   const router = useRouter();
   const storedEmail = useUserContextStore((state) => state.email);
-  const setStoredEmail = useUserContextStore((state) => state.setEmail);
+  const storedNext = useUserContextStore((state) => state.next);
+  const setSignIn = useUserContextStore((state) => state.setSignIn);
+  // The page to open after signing in. "use a different email" comes back without it, so fall back to the stored one.
+  const next = useSearchParams().get("next") ?? storedNext;
   // Coming back with "use a different email" shows the last one, ready to fix.
   const [email, setEmail] = useState(storedEmail ?? "");
   const [pending, setPending] = useState(false);
@@ -30,8 +33,9 @@ export function EmailForm() {
       setFailed(true);
       return;
     }
-    setStoredEmail(email);
+    setSignIn(email, next);
     router.push("/sign-in/code");
+    setPending(false); // this page is kept for Back, so don't leave it on "Sending…"
   }
 
   return (

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth/auth-client";
 import { cn } from "cn";
+import { safeNext } from "@/lib/auth/safe-next";
 import { useUserContextStore } from "@/lib/auth/user-context-store";
 
 // Neon Auth's real code lifetime: a code's expiresAt is 300 s after it's made, though Neon's email says 10 minutes.
@@ -16,6 +17,7 @@ const CODE_LIFETIME_MINUTES = 5;
 export function CodeForm() {
   const router = useRouter();
   const email = useUserContextStore((state) => state.email);
+  const next = useUserContextStore((state) => state.next);
   const [code, setCode] = useState("");
   const [pending, setPending] = useState(false);
   const [resending, setResending] = useState(false);
@@ -38,8 +40,9 @@ export function CodeForm() {
       otp: code,
     });
     if (!error) {
-      router.push("/");
-      router.refresh(); // rebuild the server pages with the new session cookie
+      // A full page load, not router.push: the browser forgets the pages it kept from before signing in,
+      // like /submit's "go to sign-in", which it would otherwise replay.
+      window.location.assign(safeNext(next));
       return;
     }
     setPending(false);

@@ -1,6 +1,7 @@
 import { Coffee, X } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { EmailForm } from "@/components/email-form";
 import { GoogleSignIn } from "@/components/google-sign-in";
 import { buttonVariants } from "@/components/ui/button";
@@ -50,7 +51,10 @@ export default function SignInPage() {
           <span aria-hidden className="h-px flex-1 bg-latte" />
         </div>
 
-        <EmailForm />
+        {/* EmailForm reads ?next= from the URL, which is only known when someone visits. */}
+        <Suspense>
+          <EmailForm />
+        </Suspense>
 
         <p className="mt-auto flex flex-wrap justify-center gap-x-1 text-sm leading-normal text-mocha">
           <span>Just browsing? You don&apos;t need an account.</span>

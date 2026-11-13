@@ -37,7 +37,7 @@ export default function SubmitPage() {
 // Visitors who aren't signed in go to sign in first; Members get the form.
 async function MembersOnly() {
   const member = await getMember();
-  if (!member) redirect("/sign-in");
+  if (!member) redirect("/sign-in?next=/submit");
 
   return <SubmitForm />;
 }
