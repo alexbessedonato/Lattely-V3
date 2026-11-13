@@ -29,6 +29,5 @@ export async function submitShopAction(
   const refusal = await submitShop(member, result.data); // result.data is Zod's tidied version
   if (refusal) return { values, errors: { form: [refusal] } };
 
-  // shortcut: /my-submissions is checkpoint 4, so this lands on a 404 until it exists.
-  redirect("/my-submissions");
+  redirect("/my-submissions?submitted=1"); // shows "Thanks! We'll check it soon."
 }

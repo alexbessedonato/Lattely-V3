@@ -1,6 +1,7 @@
 "use client";
 
-import { LogOut } from "lucide-react";
+import { ListChecks, LogOut } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   DropdownMenu,
@@ -12,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth/auth-client";
 
-// The round button with the Member's initial, which opens a menu to sign out.
+// The round button with the Member's initial, which opens a menu with My submissions and Sign out.
 export function AccountMenu({ name, email }: { name: string; email: string }) {
   const router = useRouter();
 
@@ -37,6 +38,14 @@ export function AccountMenu({ name, email }: { name: string; email: string }) {
             Signed in as {email}
           </DropdownMenuLabel>
         </DropdownMenuGroup>
+
+        <DropdownMenuItem
+          render={<Link href="/my-submissions" />}
+          className="min-h-11 text-base"
+        >
+          <ListChecks aria-hidden />
+          My submissions
+        </DropdownMenuItem>
 
         <DropdownMenuItem onClick={signOut} className="min-h-11 text-base">
           <LogOut aria-hidden />
