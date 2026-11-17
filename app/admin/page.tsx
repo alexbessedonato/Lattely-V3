@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 import { BackToRanking } from "@/components/back-to-ranking";
-import { ReviewCard } from "@/components/review-card";
+import { SubmissionCard } from "@/components/submission-card";
 import { Button } from "@/components/ui/button";
 import { getLiveShops } from "@/lib/admin/close-shop";
 import { getAdmin } from "@/lib/admin/get-admin";
-import { closeAction } from "@/lib/admin/review-actions";
-import { getPendingSubmissions } from "@/lib/admin/review-submissions";
+import { closeShopAction } from "@/lib/admin/close-shop-action";
+import { getPendingSubmissions } from "@/lib/admin/submissions";
 import { getMember } from "@/lib/auth/auth-server";
 
 export const metadata: Metadata = { title: "Admin · Lattely" };
@@ -60,8 +60,8 @@ async function AdminsOnly() {
           </p>
         )}
 
-        {pending.map((shop) => (
-          <ReviewCard key={shop.id} shop={shop} />
+        {pending.map((submission) => (
+          <SubmissionCard key={submission.id} submission={submission} />
         ))}
       </section>
 
@@ -88,7 +88,7 @@ async function AdminsOnly() {
               </div>
 
               {/* A form so the button works without JavaScript; shop.id is bound on the server. */}
-              <form action={closeAction.bind(null, shop.id)}>
+              <form action={closeShopAction.bind(null, shop.id)}>
                 <Button
                   type="submit"
                   variant="outline"

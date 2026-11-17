@@ -4,10 +4,11 @@ import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { approveAction, rejectAction } from "@/lib/admin/review-actions";
+import { approveSubmissionAction } from "@/lib/admin/approve-submission-action";
+import { rejectSubmissionAction } from "@/lib/admin/reject-submission-action";
 
 type Props = {
-  shop: {
+  submission: {
     id: number;
     name: string;
     address: string;
@@ -16,12 +17,12 @@ type Props = {
 };
 
 // One pending Submission on /admin: Approve needs its coordinates, Reject doesn't.
-export function ReviewCard({ shop }: Props) {
+export function SubmissionCard({ submission }: Props) {
   const [state, approve, approving] = useActionState(
-    approveAction.bind(null, shop.id),
+    approveSubmissionAction.bind(null, submission.id),
     { coordinates: "" },
   );
-  const inputId = `coordinates-${shop.id}`;
+  const inputId = `coordinates-${submission.id}`;
 
   return (
     <form
@@ -29,18 +30,18 @@ export function ReviewCard({ shop }: Props) {
       className="flex flex-col gap-3.5 rounded-3xl border border-latte bg-paper p-4.5"
     >
       <div className="flex flex-col gap-1">
-        <span className="text-[17px] font-bold">{shop.name}</span>
+        <span className="text-[17px] font-bold">{submission.name}</span>
 
-        <span className="text-sm text-mocha">{shop.address}</span>
+        <span className="text-sm text-mocha">{submission.address}</span>
 
-        {shop.instagramOrWebsite && (
+        {submission.instagramOrWebsite && (
           <a
-            href={shop.instagramOrWebsite}
+            href={submission.instagramOrWebsite}
             target="_blank"
             rel="noreferrer"
             className="text-sm font-semibold break-all underline"
           >
-            {shop.instagramOrWebsite}
+            {submission.instagramOrWebsite}
           </a>
         )}
       </div>
@@ -82,11 +83,11 @@ export function ReviewCard({ shop }: Props) {
           {approving ? "Approving…" : "Approve"}
         </Button>
 
-        {/* formAction sends this form to rejectAction instead, so the coordinates are ignored. */}
+        {/* formAction sends this form to rejectSubmissionAction instead, so the coordinates are ignored. */}
         <Button
           type="submit"
           variant="outline"
-          formAction={rejectAction.bind(null, shop.id)}
+          formAction={rejectSubmissionAction.bind(null, submission.id)}
           className="h-12 flex-1 rounded-full text-[15px] font-semibold"
         >
           Reject

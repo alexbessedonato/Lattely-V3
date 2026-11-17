@@ -6,7 +6,7 @@ import {
   approveSubmission,
   getPendingSubmissions,
   rejectSubmission,
-} from "@/lib/admin/review-submissions";
+} from "@/lib/admin/submissions";
 
 beforeEach(async () => {
   await db.delete(ratings);
@@ -23,12 +23,12 @@ async function addShop(name: string, status: "pending" | "live" | "rejected") {
   return shop.id;
 }
 
-async function statusOf(id: number) {
+async function findShop(id: number) {
   const [shop] = await db.select().from(shops).where(eq(shops.id, id));
   return shop;
 }
 
-test("only pending Shops are listed for review, oldest first", async () => {
+test("only pending Shops are listed for an Admin, oldest first", async () => {
   await addShop("first", "pending");
   await addShop("live", "live");
   await addShop("second", "pending");
@@ -42,7 +42,7 @@ test("approving makes the Shop live at the given point", async () => {
 
   await approveSubmission(id, { x: 2.17, y: 41.38 });
 
-  expect(await statusOf(id)).toMatchObject({
+  expect(await findShop(id)).toMatchObject({
     status: "live",
     location: { x: 2.17, y: 41.38 },
   });
@@ -53,7 +53,7 @@ test("rejecting marks the Shop rejected", async () => {
 
   await rejectSubmission(id);
 
-  expect(await statusOf(id)).toMatchObject({ status: "rejected" });
+  expect(await findShop(id)).toMatchObject({ status: "rejected" });
 });
 
 test("a Shop that isn't pending anymore can't be approved or rejected", async () => {
@@ -63,9 +63,9 @@ test("a Shop that isn't pending anymore can't be approved or rejected", async ()
   await approveSubmission(rejected, { x: 2.17, y: 41.38 });
   await rejectSubmission(live);
 
-  expect(await statusOf(rejected)).toMatchObject({
+  expect(await findShop(rejected)).toMatchObject({
     status: "rejected",
     location: null,
   });
-  expect(await statusOf(live)).toMatchObject({ status: "live" });
+  expect(await findShop(live)).toMatchObject({ status: "live" });
 });

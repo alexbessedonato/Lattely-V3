@@ -7,3 +7,8 @@ export async function getAdmin() {
   if (!member || !(await isAdmin(member))) return null;
   return member;
 }
+
+// Server Actions can be called by anyone, not just from /admin, so each one calls this first.
+export async function refuseNonAdmins() {
+  if (!(await getAdmin())) throw new Error("Only Admins can do this.");
+}

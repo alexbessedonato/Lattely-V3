@@ -18,17 +18,17 @@ export async function getPendingSubmissions() {
 }
 
 // Makes the Submission a live Shop at that point. Does nothing if it isn't pending anymore.
-export async function approveSubmission(shopId: number, location: Point) {
+export async function approveSubmission(submissionId: number, location: Point) {
   await db
     .update(shops)
     .set({ status: "live", location })
-    .where(and(eq(shops.id, shopId), eq(shops.status, "pending")));
+    .where(and(eq(shops.id, submissionId), eq(shops.status, "pending")));
 }
 
 // Turns the Submission down. Does nothing if it isn't pending anymore.
-export async function rejectSubmission(shopId: number) {
+export async function rejectSubmission(submissionId: number) {
   await db
     .update(shops)
     .set({ status: "rejected" })
-    .where(and(eq(shops.id, shopId), eq(shops.status, "pending")));
+    .where(and(eq(shops.id, submissionId), eq(shops.status, "pending")));
 }
