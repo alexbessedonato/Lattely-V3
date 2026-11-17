@@ -2,7 +2,6 @@ import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
-import { fallbackImage } from "@/lib/fallback-image";
 import { formatDistance } from "@/lib/format-distance";
 import {
   serializeFilterParams,
@@ -108,7 +107,7 @@ function ShopCard({ shop, big = false }: { shop: RankedShop; big?: boolean }) {
       <div className={`relative ${big ? "h-55" : "h-30"}`}>
         <Image
           loading="eager"
-          src={fallbackImage(shop.id)}
+          src={shop.image}
           alt=""
           fill
           className="object-cover"

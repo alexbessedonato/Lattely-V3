@@ -1,6 +1,7 @@
-import { afterAll, beforeEach, expect, test } from "vitest";
+import { afterAll, beforeEach, expect, test, vi } from "vitest";
 import { db } from "@/db/client";
 import { ratings, shops } from "@/db/schema";
+import { fallbackImage } from "@/lib/fallback-image";
 import { getRanking } from "@/lib/ranking/ranking";
 
 // Every test starts from no Shops and no Ratings.
@@ -181,4 +182,21 @@ test("with no Centre point, there is no distance", async () => {
   const [shop] = await getRanking();
 
   expect(shop.distanceM).toBeNull();
+});
+
+test("a Shop with a photo shows it from the bucket; one without gets its fallback drawing", async () => {
+  vi.stubEnv("AWS_ENDPOINT_URL_S3", "https://bucket.example"); // tests don't read .env.local
+  const withPhoto = await addLiveShop("with-photo");
+  await db.update(shops).set({ photoKey: "shops/abc.webp" });
+  const withoutPhoto = await addLiveShop("without-photo");
+
+  const ranking = await getRanking();
+
+  expect(ranking.find((shop) => shop.id === withPhoto.id)?.image).toBe(
+    "https://bucket.example/shop-photos/shops/abc.webp",
+  );
+  expect(ranking.find((shop) => shop.id === withoutPhoto.id)?.image).toBe(
+    fallbackImage(withoutPhoto.id),
+  );
+  vi.unstubAllEnvs();
 });

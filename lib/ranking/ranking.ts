@@ -1,6 +1,8 @@
 import { and, asc, count, desc, eq, getTableColumns, sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { ratings, shops } from "@/db/schema";
+import { fallbackImage } from "@/lib/fallback-image";
+import { photoUrl } from "@/lib/photo/photo-bucket";
 import type { Point } from "@/lib/ranking/types/point";
 
 // How many "average" Ratings every Shop starts with, so one 5-star Rating can't top the Ranking.
@@ -49,5 +51,10 @@ export async function getRanking(filter?: {
       asc(shops.name), // name breaks ties, so the order never jumps around
     );
 
-  return rows.map((shop, i) => ({ ...shop, rank: i + 1 }));
+  return rows.map((shop, i) => ({
+    ...shop,
+    rank: i + 1,
+    // Worked out here on the server: the browser can't see AWS_ENDPOINT_URL_S3.
+    image: shop.photoKey ? photoUrl(shop.photoKey) : fallbackImage(shop.id),
+  }));
 }

@@ -7,7 +7,6 @@ import { BackToRanking } from "@/components/back-to-ranking";
 import { RateShop } from "@/components/rate-shop";
 import { RateShopSkeleton } from "@/components/skeletons/rate-shop-skeleton";
 import { buttonVariants } from "@/components/ui/button";
-import { fallbackImage } from "@/lib/fallback-image";
 import { getShop } from "@/lib/ranking/shop";
 import { cn } from "cn";
 
@@ -46,7 +45,7 @@ async function ShopDetail({
       <div className="relative mt-1 h-70 overflow-hidden rounded-[28px]">
         <Image
           loading="eager"
-          src={fallbackImage(shop.id)}
+          src={shop.image}
           alt=""
           fill
           className="object-cover"
