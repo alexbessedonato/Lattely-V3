@@ -1,6 +1,6 @@
 "use client";
 
-import { ListChecks, LogOut } from "lucide-react";
+import { ListChecks, LogOut, UserRound } from "lucide-react";
 import Link from "next/link";
 import {
   DropdownMenu,
@@ -10,16 +10,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { authClient } from "@/lib/auth/auth-client";
+import { signOut } from "@/lib/auth/sign-out";
 
-// The round button with the Member's initial, which opens a menu with My submissions and Sign out.
+// The round button with the Member's initial, which opens a menu with Account, My submissions and Sign out.
 export function AccountMenu({ name, email }: { name: string; email: string }) {
-  async function signOut() {
-    await authClient.signOut();
-    // A full reload, so no page kept from while signed in (like the /submit form) can show again.
-    window.location.reload();
-  }
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -36,6 +30,14 @@ export function AccountMenu({ name, email }: { name: string; email: string }) {
             Signed in as {email}
           </DropdownMenuLabel>
         </DropdownMenuGroup>
+
+        <DropdownMenuItem
+          render={<Link href="/account" />}
+          className="min-h-11 text-base"
+        >
+          <UserRound aria-hidden />
+          Account
+        </DropdownMenuItem>
 
         <DropdownMenuItem
           render={<Link href="/my-submissions" />}
