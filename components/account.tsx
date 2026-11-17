@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AccountMenu } from "@/components/account-menu";
 import { buttonVariants } from "@/components/ui/button";
+import { isAdmin } from "@/lib/admin/is-admin";
 import { getMember } from "@/lib/auth/auth-server";
 import { cn } from "cn";
 
@@ -23,5 +24,11 @@ export async function Account() {
     );
   }
 
-  return <AccountMenu name={member.name} email={member.email} />;
+  return (
+    <AccountMenu
+      name={member.name}
+      email={member.email}
+      isAdmin={await isAdmin(member)}
+    />
+  );
 }

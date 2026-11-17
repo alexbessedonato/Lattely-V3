@@ -1,6 +1,6 @@
 "use client";
 
-import { ListChecks, LogOut, UserRound } from "lucide-react";
+import { ListChecks, LogOut, ShieldCheck, UserRound } from "lucide-react";
 import Link from "next/link";
 import {
   DropdownMenu,
@@ -12,8 +12,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { signOut } from "@/lib/auth/sign-out";
 
-// The round button with the Member's initial, which opens a menu with Account, My submissions and Sign out.
-export function AccountMenu({ name, email }: { name: string; email: string }) {
+// The round button with the Member's initial, which opens a menu with Account, My submissions and Sign out,
+// plus Admin for Admins. Hiding it is only for tidiness: /admin checks for itself who may see it.
+export function AccountMenu({
+  name,
+  email,
+  isAdmin,
+}: {
+  name: string;
+  email: string;
+  isAdmin: boolean;
+}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -46,6 +55,16 @@ export function AccountMenu({ name, email }: { name: string; email: string }) {
           <ListChecks aria-hidden />
           My submissions
         </DropdownMenuItem>
+
+        {isAdmin && (
+          <DropdownMenuItem
+            render={<Link href="/admin" />}
+            className="min-h-11 text-base"
+          >
+            <ShieldCheck aria-hidden />
+            Admin
+          </DropdownMenuItem>
+        )}
 
         <DropdownMenuItem onClick={signOut} className="min-h-11 text-base">
           <LogOut aria-hidden />
