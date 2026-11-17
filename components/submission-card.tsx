@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,10 +15,11 @@ type Props = {
     address: string;
     instagramOrWebsite: string | null;
   };
+  photoUrl: string | null; // the Member's photo, if they sent one
 };
 
-// One pending Submission on /admin: Approve needs its coordinates, Reject doesn't.
-export function SubmissionCard({ submission }: Props) {
+// One pending Submission on /admin: Approve needs its coordinates and can drop the photo, Reject doesn't.
+export function SubmissionCard({ submission, photoUrl }: Props) {
   const [state, approve, approving] = useActionState(
     approveSubmissionAction.bind(null, submission.id),
     { coordinates: "" },
@@ -29,6 +31,18 @@ export function SubmissionCard({ submission }: Props) {
       action={approve}
       className="flex flex-col gap-3.5 rounded-3xl border border-latte bg-paper p-4.5"
     >
+      {photoUrl && (
+        <div className="relative h-44 overflow-hidden rounded-2xl">
+          <Image
+            src={photoUrl}
+            alt={`Photo sent with ${submission.name}`}
+            fill
+            sizes="400px"
+            className="object-cover"
+          />
+        </div>
+      )}
+
       <div className="flex flex-col gap-1">
         <span className="text-[17px] font-bold">{submission.name}</span>
 
@@ -73,6 +87,17 @@ export function SubmissionCard({ submission }: Props) {
             "In Google Maps, right-click the shop and copy the numbers."}
         </p>
       </div>
+
+      {photoUrl && (
+        <label className="flex min-h-11 items-center gap-3 text-sm font-semibold">
+          <input
+            type="checkbox"
+            name="removePhoto"
+            className="size-5 accent-espresso"
+          />
+          Remove photo (the shop gets a drawing instead)
+        </label>
+      )}
 
       <div className="flex gap-2.5">
         <Button

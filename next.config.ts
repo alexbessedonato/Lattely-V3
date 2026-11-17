@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
   logging: {
     serverFunctions: false, // dev would print each Server Action's arguments, the Visitor's location included (ADR-0002)
   },
+  images: {
+    // <Image> may load Shop photos from this branch's bucket only (AWS_ENDPOINT_URL_S3), not any address.
+    remotePatterns: process.env.AWS_ENDPOINT_URL_S3
+      ? [new URL(`${process.env.AWS_ENDPOINT_URL_S3}/shop-photos/**`)]
+      : [],
+  },
   partialPrefetching: true,
   turbopack: {
     rules: {

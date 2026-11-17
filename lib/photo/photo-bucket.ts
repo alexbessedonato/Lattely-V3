@@ -7,6 +7,11 @@ import {
 // The AWS SDK reads the AWS_* keys from the environment (.env.local in dev, Vercel in production), pointed at Neon.
 const s3 = new S3Client({ forcePathStyle: true }); // Neon only understands path-style URLs: <endpoint>/<bucket>/<key>
 
+// The public address of a photo in the bucket. The bucket is public_read, so a browser can load it straight away.
+export function photoUrl(key: string) {
+  return `${process.env.AWS_ENDPOINT_URL_S3}/shop-photos/${key}`;
+}
+
 // Puts a prepared WebP in the "shop-photos" bucket and returns its key.
 // The key is random, so nobody can guess other photos' keys, and the uploaded file's name never leaks.
 export async function uploadPhoto(webp: Buffer) {

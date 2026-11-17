@@ -9,6 +9,7 @@ import { getAdmin } from "@/lib/admin/get-admin";
 import { closeShopAction } from "@/lib/admin/close-shop-action";
 import { getPendingSubmissions } from "@/lib/admin/submissions";
 import { getMember } from "@/lib/auth/auth-server";
+import { photoUrl } from "@/lib/photo/photo-bucket";
 
 export const metadata: Metadata = { title: "Admin · Lattely" };
 
@@ -61,7 +62,11 @@ async function AdminsOnly() {
         )}
 
         {pending.map((submission) => (
-          <SubmissionCard key={submission.id} submission={submission} />
+          <SubmissionCard
+            key={submission.id}
+            submission={submission}
+            photoUrl={submission.photoKey && photoUrl(submission.photoKey)}
+          />
         ))}
       </section>
 

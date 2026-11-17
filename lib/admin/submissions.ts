@@ -11,24 +11,49 @@ export async function getPendingSubmissions() {
       name: shops.name,
       address: shops.address,
       instagramOrWebsite: shops.instagramOrWebsite,
+      photoKey: shops.photoKey,
     })
     .from(shops)
     .where(eq(shops.status, "pending"))
     .orderBy(shops.id);
 }
 
-// Makes the Submission a live Shop at that point. Does nothing if it isn't pending anymore.
-export async function approveSubmission(submissionId: number, location: Point) {
+// Makes the Submission a live Shop at that point. With removePhoto, it goes live without the Member's photo.
+// Returns the key of a photo that was dropped, for the caller to delete from the bucket, or null.
+// Does nothing (and returns null) if it isn't pending anymore.
+export async function approveSubmission(
+  submissionId: number,
+  location: Point,
+  removePhoto = false,
+) {
+  const photoKey = await pendingPhotoKey(submissionId);
   await db
     .update(shops)
-    .set({ status: "live", location })
+    .set(
+      removePhoto
+        ? { status: "live", location, photoKey: null }
+        : { status: "live", location },
+    )
     .where(and(eq(shops.id, submissionId), eq(shops.status, "pending")));
+  return removePhoto ? photoKey : null;
 }
 
-// Turns the Submission down. Does nothing if it isn't pending anymore.
+// Turns the Submission down and drops its photo. Returns that photo's key, for the caller to delete
+// from the bucket, or null. Does nothing (and returns null) if it isn't pending anymore.
 export async function rejectSubmission(submissionId: number) {
+  const photoKey = await pendingPhotoKey(submissionId);
   await db
     .update(shops)
-    .set({ status: "rejected" })
+    .set({ status: "rejected", photoKey: null })
     .where(and(eq(shops.id, submissionId), eq(shops.status, "pending")));
+  return photoKey;
+}
+
+// The photo key of a Submission that is still pending; null if it has none or isn't pending.
+async function pendingPhotoKey(submissionId: number) {
+  const [submission] = await db
+    .select({ photoKey: shops.photoKey })
+    .from(shops)
+    .where(and(eq(shops.id, submissionId), eq(shops.status, "pending")));
+  return submission?.photoKey ?? null;
 }
