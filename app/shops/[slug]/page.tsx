@@ -48,6 +48,7 @@ async function ShopDetail({
           src={shop.image}
           alt=""
           fill
+          sizes="416px" // the photo's widest, in a max-w-md page
           className="object-cover"
         />
       </div>

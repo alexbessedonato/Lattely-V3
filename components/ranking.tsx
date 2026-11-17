@@ -110,6 +110,7 @@ function ShopCard({ shop, big = false }: { shop: RankedShop; big?: boolean }) {
           src={shop.image}
           alt=""
           fill
+          sizes={big ? "408px" : "200px"} // the card's widest, in a max-w-md page: so a small card doesn't download a full-screen photo
           className="object-cover"
         />
 
