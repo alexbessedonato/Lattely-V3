@@ -1,7 +1,7 @@
 import { afterAll, beforeEach, expect, test, vi } from "vitest";
 import { db } from "@/db/client";
 import { ratings, shops } from "@/db/schema";
-import { deleteAccountAction } from "@/lib/account/delete-account-action";
+import { deleteMemberAction } from "@/lib/member/delete-member-action";
 import { auth, getMember } from "@/lib/auth/auth-server";
 import { deleteLogin } from "@/lib/auth/delete-login";
 
@@ -45,17 +45,17 @@ afterAll(() => db.$client.end());
 test("a Member's Ratings and login are deleted, then they go home", async () => {
   signInAs({ id: "member-1" });
 
-  await expect(deleteAccountAction()).rejects.toThrow("redirect /");
+  await expect(deleteMemberAction()).rejects.toThrow("redirect /");
 
   expect(await db.select().from(ratings)).toEqual([]);
   expect(auth.signOut).toHaveBeenCalled();
-  expect(deleteLogin).toHaveBeenCalledWith("member-1");
+  expect(deleteLogin).toHaveBeenCalledWith({ id: "member-1" });
 });
 
 test("a Visitor who isn't signed in is sent to sign in and nothing is deleted", async () => {
   signInAs(null);
 
-  await expect(deleteAccountAction()).rejects.toThrow("redirect /sign-in");
+  await expect(deleteMemberAction()).rejects.toThrow("redirect /sign-in");
 
   expect(await db.select().from(ratings)).toHaveLength(1);
   expect(deleteLogin).not.toHaveBeenCalled();
@@ -65,5 +65,5 @@ test("if Neon refuses to delete the login, the action fails instead of pretendin
   signInAs({ id: "member-1" });
   vi.mocked(deleteLogin).mockRejectedValue(new Error("nope"));
 
-  await expect(deleteAccountAction()).rejects.toThrow("nope");
+  await expect(deleteMemberAction()).rejects.toThrow("nope");
 });

@@ -1,7 +1,7 @@
 import { afterAll, beforeEach, expect, test } from "vitest";
 import { db } from "@/db/client";
 import { ratings, shops } from "@/db/schema";
-import { deleteMember } from "@/lib/account/delete-member";
+import { deleteMember } from "@/lib/member/delete-member";
 import { getRanking } from "@/lib/ranking/ranking";
 
 beforeEach(async () => {

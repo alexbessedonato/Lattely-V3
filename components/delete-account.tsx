@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
-import { deleteAccountAction } from "@/lib/account/delete-account-action";
+import { deleteMemberAction } from "@/lib/member/delete-member-action";
 
 const pillLook = "h-12 rounded-full px-5 text-[15px]";
 
@@ -33,7 +33,7 @@ export function DeleteAccount() {
         <div className="flex flex-wrap gap-2.5">
           <Button
             disabled={deleting}
-            onClick={() => startDeleting(() => deleteAccountAction())}
+            onClick={() => startDeleting(() => deleteMemberAction())}
             className={`${pillLook} bg-clay font-bold text-paper hover:bg-clay/90`}
           >
             {deleting ? "Deleting…" : "Yes, delete it"}

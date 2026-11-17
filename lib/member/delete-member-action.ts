@@ -1,12 +1,12 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { deleteMember } from "@/lib/account/delete-member";
+import { deleteMember } from "@/lib/member/delete-member";
 import { auth, getMember } from "@/lib/auth/auth-server";
 import { deleteLogin } from "@/lib/auth/delete-login";
 
 // "Yes, delete it" on /account posts here. It only ever deletes the signed-in Member.
-export async function deleteAccountAction() {
+export async function deleteMemberAction() {
   const member = await getMember();
   if (!member) redirect("/sign-in?next=/account");
 
@@ -16,7 +16,7 @@ export async function deleteAccountAction() {
   // Clears the session cookies in this browser, so it stops showing them as signed in.
   await auth.signOut();
 
-  await deleteLogin(member.id);
+  await deleteLogin(member);
 
   redirect("/");
 }

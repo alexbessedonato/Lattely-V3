@@ -20,7 +20,7 @@ afterEach(() => {
 test("asks Neon to delete exactly this Member's login", async () => {
   fetchMock.mockResolvedValue(new Response(null, { status: 200 }));
 
-  await deleteLogin("member-1");
+  await deleteLogin({ id: "member-1" });
 
   expect(fetchMock).toHaveBeenCalledWith(
     "https://console.neon.tech/api/v2/projects/project-1/branches/branch-1/auth/users/member-1",
@@ -31,12 +31,12 @@ test("asks Neon to delete exactly this Member's login", async () => {
 test("fails loudly when Neon says no", async () => {
   fetchMock.mockResolvedValue(new Response(null, { status: 401 }));
 
-  await expect(deleteLogin("member-1")).rejects.toThrow("HTTP 401");
+  await expect(deleteLogin({ id: "member-1" })).rejects.toThrow("HTTP 401");
 });
 
 test("fails loudly when the key isn't set", async () => {
   vi.stubEnv("NEON_API_KEY", "");
 
-  await expect(deleteLogin("member-1")).rejects.toThrow("NEON_API_KEY");
+  await expect(deleteLogin({ id: "member-1" })).rejects.toThrow("NEON_API_KEY");
   expect(fetchMock).not.toHaveBeenCalled();
 });
