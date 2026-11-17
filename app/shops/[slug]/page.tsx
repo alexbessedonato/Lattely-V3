@@ -45,11 +45,11 @@ async function ShopDetail({
     <>
       <div className="relative mt-1 h-70 overflow-hidden rounded-[28px]">
         <Image
+          loading="eager"
           src={fallbackImage(shop.id)}
           alt=""
           fill
           className="object-cover"
-          priority
         />
       </div>
 

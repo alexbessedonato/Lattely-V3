@@ -107,6 +107,7 @@ function ShopCard({ shop, big = false }: { shop: RankedShop; big?: boolean }) {
     >
       <div className={`relative ${big ? "h-55" : "h-30"}`}>
         <Image
+          loading="eager"
           src={fallbackImage(shop.id)}
           alt=""
           fill
