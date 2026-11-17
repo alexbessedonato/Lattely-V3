@@ -40,3 +40,9 @@ test("fails loudly when the key isn't set", async () => {
   await expect(deleteLogin({ id: "member-1" })).rejects.toThrow("NEON_API_KEY");
   expect(fetchMock).not.toHaveBeenCalled();
 });
+
+test("a login Neon has already deleted counts as done, so a retry works", async () => {
+  fetchMock.mockResolvedValue(new Response(null, { status: 404 }));
+
+  await expect(deleteLogin({ id: "member-1" })).resolves.toBeUndefined();
+});

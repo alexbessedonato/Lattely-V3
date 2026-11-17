@@ -50,3 +50,30 @@ test("the Ranking changes once a deleted Member's Ratings are gone", async () =>
   expect(after.map((shop) => shop.name)).toEqual(["satan", "nomad"]);
   expect(after.find((shop) => shop.name === "nomad")?.ratingCount).toBe(0);
 });
+
+test("Shops a deleted Member suggested stay, but no longer say who suggested them", async () => {
+  await db.insert(shops).values([
+    {
+      name: "theirs",
+      slug: "theirs",
+      address: "Carrer 1",
+      status: "pending",
+      submittedBy: "leaving",
+    },
+    {
+      name: "other",
+      slug: "other",
+      address: "Carrer 2",
+      status: "pending",
+      submittedBy: "staying",
+    },
+  ]);
+
+  await deleteMember({ id: "leaving" });
+
+  const left = await db.select().from(shops).orderBy(shops.name);
+  expect(left).toMatchObject([
+    { name: "other", submittedBy: "staying" },
+    { name: "theirs", submittedBy: null, status: "pending" },
+  ]);
+});

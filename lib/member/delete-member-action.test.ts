@@ -3,14 +3,17 @@ import { db } from "@/db/client";
 import { ratings, shops } from "@/db/schema";
 import { deleteMemberAction } from "@/lib/member/delete-member-action";
 import { auth, getMember } from "@/lib/auth/auth-server";
-import { deleteLogin } from "@/lib/auth/delete-login";
+import { deleteLogin, neonSettings } from "@/lib/auth/delete-login";
 
 // Tests can't sign in or reach Neon, so these are fakes; each test picks who is "signed in".
 vi.mock("@/lib/auth/auth-server", () => ({
   getMember: vi.fn(),
   auth: { signOut: vi.fn() },
 }));
-vi.mock("@/lib/auth/delete-login", () => ({ deleteLogin: vi.fn() }));
+vi.mock("@/lib/auth/delete-login", () => ({
+  deleteLogin: vi.fn(),
+  neonSettings: vi.fn(),
+}));
 // redirect() only works inside a real request; here it throws so we can see where it went.
 vi.mock("next/navigation", () => ({
   redirect: vi.fn((to: string) => {
@@ -23,7 +26,7 @@ function signInAs(member: { id: string } | null) {
 }
 
 beforeEach(async () => {
-  vi.clearAllMocks();
+  vi.resetAllMocks(); // also undoes fakes a test set up, like a Neon failure
   await db.delete(ratings);
   await db.delete(shops);
   const [shop] = await db
@@ -66,4 +69,17 @@ test("if Neon refuses to delete the login, the action fails instead of pretendin
   vi.mocked(deleteLogin).mockRejectedValue(new Error("nope"));
 
   await expect(deleteMemberAction()).rejects.toThrow("nope");
+});
+
+test("if the Neon key isn't set, nothing is deleted and the Member stays signed in", async () => {
+  signInAs({ id: "member-1" });
+  vi.mocked(neonSettings).mockImplementation(() => {
+    throw new Error("NEON_API_KEY is not set");
+  });
+
+  await expect(deleteMemberAction()).rejects.toThrow("NEON_API_KEY");
+
+  expect(await db.select().from(ratings)).toHaveLength(1);
+  expect(auth.signOut).not.toHaveBeenCalled();
+  expect(deleteLogin).not.toHaveBeenCalled();
 });
