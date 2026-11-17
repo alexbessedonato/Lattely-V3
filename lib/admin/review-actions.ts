@@ -1,6 +1,7 @@
 "use server";
 
 import { refresh } from "next/cache";
+import { closeShop } from "@/lib/admin/close-shop";
 import { parseCoordinates } from "@/lib/admin/coordinates";
 import { getAdmin } from "@/lib/admin/get-admin";
 import {
@@ -41,4 +42,11 @@ export async function rejectAction(shopId: number) {
   await refuseNonAdmins();
   await rejectSubmission(shopId);
   refresh();
+}
+
+// The Close button next to a live Shop posts here.
+export async function closeAction(shopId: number) {
+  await refuseNonAdmins();
+  await closeShop(shopId);
+  refresh(); // rebuild /admin so the Shop leaves the Live shops list
 }

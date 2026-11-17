@@ -3,7 +3,10 @@ import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 import { BackToRanking } from "@/components/back-to-ranking";
 import { ReviewCard } from "@/components/review-card";
+import { Button } from "@/components/ui/button";
+import { getLiveShops } from "@/lib/admin/close-shop";
 import { getAdmin } from "@/lib/admin/get-admin";
+import { closeAction } from "@/lib/admin/review-actions";
 import { getPendingSubmissions } from "@/lib/admin/review-submissions";
 import { getMember } from "@/lib/auth/auth-server";
 
@@ -35,6 +38,7 @@ async function AdminsOnly() {
   }
 
   const pending = await getPendingSubmissions();
+  const live = await getLiveShops();
 
   return (
     <>
@@ -59,6 +63,44 @@ async function AdminsOnly() {
         {pending.map((shop) => (
           <ReviewCard key={shop.id} shop={shop} />
         ))}
+      </section>
+
+      <section aria-labelledby="live-title">
+        <h2 id="live-title" className="font-heading text-[22px] font-semibold">
+          Live shops
+        </h2>
+
+        <p className="mt-1 mb-2 text-sm leading-normal text-mocha">
+          Close a shop that has shut down. It leaves the Ranking; its ratings
+          are kept.
+        </p>
+
+        <ul>
+          {live.map((shop) => (
+            <li
+              key={shop.id}
+              className="flex min-h-16 items-center gap-3 border-b border-latte py-2.5"
+            >
+              <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                <span className="font-semibold">{shop.name}</span>
+
+                <span className="text-sm text-mocha">{shop.address}</span>
+              </div>
+
+              {/* A form so the button works without JavaScript; shop.id is bound on the server. */}
+              <form action={closeAction.bind(null, shop.id)}>
+                <Button
+                  type="submit"
+                  variant="outline"
+                  aria-label={`Close ${shop.name}`}
+                  className="h-11 rounded-full border-dashed border-mocha px-4 font-semibold"
+                >
+                  Close
+                </Button>
+              </form>
+            </li>
+          ))}
+        </ul>
       </section>
     </>
   );
