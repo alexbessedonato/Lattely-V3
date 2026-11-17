@@ -4,8 +4,8 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   experimental: {
-    // Room for a Shop photo on the approve form (the default is 1 MB). Vercel refuses requests over 4.5 MB anyway.
-    serverActions: { bodySizeLimit: "4mb" },
+    // A 4 MB photo (MAX_PHOTO_BYTES) plus the rest of the form; the default is 1 MB. Vercel refuses requests over 4.5 MB anyway.
+    serverActions: { bodySizeLimit: "4.1mb" },
   },
   logging: {
     serverFunctions: false, // dev would print each Server Action's arguments, the Visitor's location included (ADR-0002)

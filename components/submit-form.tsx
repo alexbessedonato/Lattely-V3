@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { MAX_PHOTO_BYTES } from "@/lib/photo/max-photo-bytes";
 import { submitShopAction } from "@/lib/submission/submit-shop-action";
 import type { SubmitShopState } from "@/lib/submission/types/submit-shop-state";
 
@@ -12,11 +13,15 @@ const empty: SubmitShopState = {
   errors: {},
 };
 
+const tooBigMessage = "That photo is over 4 MB. Try a smaller one.";
+
 const inputLook = "h-13 rounded-full bg-white px-5 md:text-base";
 
 // The /submit form. The Server Action checks it and sends back a message for each field that's wrong.
 export function SubmitForm() {
   const [state, formAction, pending] = useActionState(submitShopAction, empty);
+  const [photoTooBig, setPhotoTooBig] = useState(false);
+  const photoErrors = photoTooBig ? [tooBigMessage] : state.errors.photo;
 
   return (
     <form action={formAction} className="flex flex-col gap-4.5">
@@ -80,17 +85,23 @@ export function SubmitForm() {
             Photo <span className="font-normal">(optional)</span>
           </>
         }
-        errors={state.errors.photo}
+        errors={photoErrors}
       >
         <Input
           id="photo"
           name="photo"
           type="file"
           accept="image/jpeg,image/png,image/webp"
-          aria-invalid={Boolean(state.errors.photo)}
+          aria-invalid={Boolean(photoErrors)}
           aria-describedby={
-            state.errors.photo ? "photo-error photo-help" : "photo-help"
+            photoErrors ? "photo-error photo-help" : "photo-help"
           }
+          onChange={(event) => {
+            const input = event.currentTarget;
+            const tooBig = (input.files?.[0]?.size ?? 0) > MAX_PHOTO_BYTES;
+            input.setCustomValidity(tooBig ? tooBigMessage : ""); // the browser won't submit while this is set
+            setPhotoTooBig(tooBig);
+          }}
           className="h-13 rounded-full bg-white px-5 py-3.5 md:text-base"
         />
 
