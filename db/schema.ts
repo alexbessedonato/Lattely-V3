@@ -28,6 +28,8 @@ export const shops = pgTable("shops", {
   // The id of the Member who submitted it. Null for Shops we added ourselves.
   // shortcut: plain text like ratings.memberId; make it a foreign key with that one.
   submittedBy: text("submitted_by"),
+  // The photo's key in the "shop-photos" bucket, like "shops/<uuid>.webp". Null: no photo, show a fallback.
+  photoKey: text("photo_key"),
 });
 
 export const neighbourhoods = pgTable("neighbourhoods", {

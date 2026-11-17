@@ -17,11 +17,15 @@ export async function getPendingSubmissions() {
     .orderBy(shops.id);
 }
 
-// Makes the Submission a live Shop at that point. Does nothing if it isn't pending anymore.
-export async function approveSubmission(submissionId: number, location: Point) {
+// Makes the Submission a live Shop at that point, with its photo if there is one. Does nothing if it isn't pending anymore.
+export async function approveSubmission(
+  submissionId: number,
+  location: Point,
+  photoKey: string | null = null,
+) {
   await db
     .update(shops)
-    .set({ status: "live", location })
+    .set({ status: "live", location, photoKey })
     .where(and(eq(shops.id, submissionId), eq(shops.status, "pending")));
 }
 

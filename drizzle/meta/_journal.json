@@ -43,6 +43,13 @@
       "when": 1794564703359,
       "tag": "0005_create-admins",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794915285888,
+      "tag": "0006_add-photo-key",
+      "breakpoints": true
     }
   ]
 }
