@@ -16,14 +16,13 @@ type Props = {
   };
 };
 
-// One pending Submission on /admin: Approve needs its coordinates and can take a photo, Reject needs neither.
+// One pending Submission on /admin: Approve needs its coordinates, Reject doesn't.
 export function SubmissionCard({ submission }: Props) {
   const [state, approve, approving] = useActionState(
     approveSubmissionAction.bind(null, submission.id),
     { coordinates: "" },
   );
   const inputId = `coordinates-${submission.id}`;
-  const photoId = `photo-${submission.id}`;
 
   return (
     <form
@@ -72,34 +71,6 @@ export function SubmissionCard({ submission }: Props) {
         >
           {state.error ??
             "In Google Maps, right-click the shop and copy the numbers."}
-        </p>
-      </div>
-
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor={photoId} className="font-semibold">
-          Photo (optional)
-        </Label>
-
-        <Input
-          id={photoId}
-          name="photo"
-          type="file"
-          accept="image/jpeg,image/png,image/webp"
-          aria-invalid={Boolean(state.photoError)}
-          aria-describedby={`${photoId}-help`}
-          className="h-12 rounded-2xl bg-cream px-3.5 py-2.5 md:text-base"
-        />
-
-        <p
-          id={`${photoId}-help`}
-          className={
-            state.photoError
-              ? "text-sm font-semibold text-destructive"
-              : "text-[13px] text-mocha"
-          }
-        >
-          {state.photoError ??
-            "A JPEG, PNG or WebP up to 4 MB. Without one, the shop gets a drawing."}
         </p>
       </div>
 

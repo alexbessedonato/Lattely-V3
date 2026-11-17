@@ -73,6 +73,32 @@ export function SubmitForm() {
         />
       </Field>
 
+      <Field
+        id="photo"
+        label={
+          <>
+            Photo <span className="font-normal">(optional)</span>
+          </>
+        }
+        errors={state.errors.photo}
+      >
+        <Input
+          id="photo"
+          name="photo"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          aria-invalid={Boolean(state.errors.photo)}
+          aria-describedby={
+            state.errors.photo ? "photo-error photo-help" : "photo-help"
+          }
+          className="h-13 rounded-full bg-white px-5 py-3.5 md:text-base"
+        />
+
+        <p id="photo-help" className="pl-5 text-[13px] text-mocha">
+          A JPEG, PNG or WebP up to 4 MB, of the shop from outside or the bar.
+        </p>
+      </Field>
+
       {state.errors.form && (
         <p role="alert" className="text-sm font-semibold text-destructive">
           {state.errors.form[0]}

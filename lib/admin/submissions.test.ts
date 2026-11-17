@@ -45,16 +45,7 @@ test("approving makes the Shop live at the given point", async () => {
   expect(await findShop(id)).toMatchObject({
     status: "live",
     location: { x: 2.17, y: 41.38 },
-    photoKey: null,
   });
-});
-
-test("approving with a photo stores the photo's key on the Shop", async () => {
-  const id = await addShop("nomad", "pending");
-
-  await approveSubmission(id, { x: 2.17, y: 41.38 }, "shops/abc.webp");
-
-  expect(await findShop(id)).toMatchObject({ photoKey: "shops/abc.webp" });
 });
 
 test("rejecting marks the Shop rejected", async () => {

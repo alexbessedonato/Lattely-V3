@@ -5,6 +5,7 @@ export type SubmitShopState = {
     name?: string[];
     address?: string[];
     instagramOrWebsite?: string[];
+    photo?: string[];
     form?: string[]; // about the whole Submission, not one field (e.g. the 3-pending limit)
   };
 };

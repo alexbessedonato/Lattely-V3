@@ -5,8 +5,6 @@ import { parseCoordinates } from "@/lib/admin/coordinates";
 import { refuseNonAdmins } from "@/lib/admin/get-admin";
 import { approveSubmission } from "@/lib/admin/submissions";
 import type { ApproveState } from "@/lib/admin/types/approve-state";
-import { preparePhoto } from "@/lib/photo/prepare-photo";
-import { uploadPhoto } from "@/lib/photo/upload-photo";
 
 // The Approve button posts here. submissionId is bound on the page; useActionState passes in the last state first.
 export async function approveSubmissionAction(
@@ -25,23 +23,7 @@ export async function approveSubmissionAction(
     };
   }
 
-  // The photo is optional: with no file chosen, the browser still sends an empty one.
-  const photo = formData.get("photo");
-  let photoKey = null;
-  if (photo instanceof File && photo.size > 0) {
-    let webp;
-    try {
-      webp = await preparePhoto(photo);
-    } catch {
-      return {
-        coordinates,
-        photoError: "That file isn't a photo. Try a JPEG, PNG or WebP.",
-      };
-    }
-    photoKey = await uploadPhoto(webp);
-  }
-
-  await approveSubmission(submissionId, location, photoKey);
+  await approveSubmission(submissionId, location);
   refresh(); // rebuild /admin so the Submission leaves the list
   return { coordinates: "" };
 }

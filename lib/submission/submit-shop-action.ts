@@ -3,6 +3,8 @@
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getMember } from "@/lib/auth/auth-server";
+import { preparePhoto } from "@/lib/photo/prepare-photo";
+import { deletePhoto, uploadPhoto } from "@/lib/photo/photo-bucket";
 import { submissionSchema } from "@/lib/submission/submission-schema";
 import { submitShop } from "@/lib/submission/submit-shop";
 import type { SubmitShopState } from "@/lib/submission/types/submit-shop-state";
@@ -26,8 +28,29 @@ export async function submitShopAction(
     return { values, errors: z.flattenError(result.error).fieldErrors };
   }
 
-  const refusal = await submitShop(member, result.data); // result.data is Zod's tidied version
-  if (refusal) return { values, errors: { form: [refusal] } };
+  // The photo is optional: with no file chosen, the browser still sends an empty one.
+  const photo = formData.get("photo");
+  let photoKey = null;
+  if (photo instanceof File && photo.size > 0) {
+    let webp;
+    try {
+      webp = await preparePhoto(photo);
+    } catch {
+      return {
+        values,
+        errors: {
+          photo: ["That file isn't a photo. Try a JPEG, PNG or WebP."],
+        },
+      };
+    }
+    photoKey = await uploadPhoto(webp);
+  }
+
+  const refusal = await submitShop(member, result.data, photoKey); // result.data is Zod's tidied version
+  if (refusal) {
+    if (photoKey) await deletePhoto(photoKey); // nothing points at it now
+    return { values, errors: { form: [refusal] } };
+  }
 
   redirect("/my-submissions?submitted=1"); // shows "Thanks! We'll check it soon."
 }

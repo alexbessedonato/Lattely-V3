@@ -1,4 +1,8 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  DeleteObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 
 // The AWS SDK reads the AWS_* keys from the environment (.env.local in dev, Vercel in production), pointed at Neon.
 const s3 = new S3Client({ forcePathStyle: true }); // Neon only understands path-style URLs: <endpoint>/<bucket>/<key>
@@ -17,4 +21,9 @@ export async function uploadPhoto(webp: Buffer) {
     }),
   );
   return key;
+}
+
+// Removes a photo from the bucket. Deleting a key that isn't there is fine: S3 doesn't complain.
+export async function deletePhoto(key: string) {
+  await s3.send(new DeleteObjectCommand({ Bucket: "shop-photos", Key: key }));
 }

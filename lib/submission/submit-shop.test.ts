@@ -26,7 +26,16 @@ test("a Submission is saved as a pending Shop of that Member", async () => {
       slug: "nomad-cafe",
       status: "pending",
       submittedBy: "member-1",
+      photoKey: null,
     },
+  ]);
+});
+
+test("a Submission with a photo stores the photo's key", async () => {
+  await submitShop(member, submission("Nomad"), "shops/abc.webp");
+
+  expect(await db.select().from(shops)).toMatchObject([
+    { photoKey: "shops/abc.webp" },
   ]);
 });
 

@@ -6,10 +6,12 @@ import type { Submission } from "@/lib/submission/types/submission";
 // How many Submissions a Member can have waiting for an Admin at once.
 export const MAX_PENDING = 3;
 
-// Saves the Member's Submission as a pending Shop. Returns why it was refused, or null if it was saved.
+// Saves the Member's Submission as a pending Shop, with its photo's key if it has one.
+// Returns why it was refused, or null if it was saved.
 export async function submitShop(
   member: { id: string },
   submission: Submission,
+  photoKey: string | null = null,
 ): Promise<string | null> {
   // shortcut: two submits at the exact same moment could both pass this check; add a database rule if that ever matters.
   const [{ pending }] = await db
@@ -25,6 +27,7 @@ export async function submitShop(
     slug: await freeSlug(submission.name),
     status: "pending",
     submittedBy: member.id,
+    photoKey,
   });
   return null;
 }
