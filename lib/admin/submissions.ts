@@ -1,6 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "@/db/client";
 import { shops } from "@/db/schema";
+import { deletePhoto } from "@/lib/photo/photo-bucket";
 import type { Point } from "@/lib/ranking/types/point";
 
 // Every Submission still waiting for an Admin, oldest first.
@@ -18,9 +19,8 @@ export async function getPendingSubmissions() {
     .orderBy(shops.id);
 }
 
-// Makes the Submission a live Shop at that point. With removePhoto, it goes live without the Member's photo.
-// Returns the key of a photo that was dropped, for the caller to delete from the bucket, or null.
-// Does nothing (and returns null) if it isn't pending anymore.
+// Makes the Submission a live Shop at that point. With removePhoto, it goes live without the Member's photo,
+// which is deleted from the bucket. Does nothing if it isn't pending anymore.
 export async function approveSubmission(
   submissionId: number,
   location: Point,
@@ -35,18 +35,18 @@ export async function approveSubmission(
         : { status: "live", location },
     )
     .where(and(eq(shops.id, submissionId), eq(shops.status, "pending")));
-  return removePhoto ? photoKey : null;
+  if (removePhoto && photoKey) await deletePhoto(photoKey); // after the database, like Reject
 }
 
-// Turns the Submission down and drops its photo. Returns that photo's key, for the caller to delete
-// from the bucket, or null. Does nothing (and returns null) if it isn't pending anymore.
+// Turns the Submission down and deletes its photo from the bucket. Does nothing if it isn't pending anymore.
 export async function rejectSubmission(submissionId: number) {
   const photoKey = await pendingPhotoKey(submissionId);
   await db
     .update(shops)
     .set({ status: "rejected", photoKey: null })
     .where(and(eq(shops.id, submissionId), eq(shops.status, "pending")));
-  return photoKey;
+  // After the database: if this fails, a photo nothing points at stays in the bucket, which is harmless.
+  if (photoKey) await deletePhoto(photoKey);
 }
 
 // The photo key of a Submission that is still pending; null if it has none or isn't pending.

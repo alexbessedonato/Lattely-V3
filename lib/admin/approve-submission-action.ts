@@ -5,7 +5,6 @@ import { parseCoordinates } from "@/lib/admin/coordinates";
 import { refuseNonAdmins } from "@/lib/admin/get-admin";
 import { approveSubmission } from "@/lib/admin/submissions";
 import type { ApproveState } from "@/lib/admin/types/approve-state";
-import { deletePhoto } from "@/lib/photo/photo-bucket";
 
 // The Approve button posts here. submissionId is bound on the page; useActionState passes in the last state first.
 export async function approveSubmissionAction(
@@ -25,12 +24,7 @@ export async function approveSubmissionAction(
   }
 
   const removePhoto = formData.get("removePhoto") === "on"; // a ticked checkbox sends "on"; unticked sends nothing
-  const removedKey = await approveSubmission(
-    submissionId,
-    location,
-    removePhoto,
-  );
-  if (removedKey) await deletePhoto(removedKey); // after the database, like Reject
+  await approveSubmission(submissionId, location, removePhoto);
   refresh(); // rebuild /admin so the Submission leaves the list
   return { coordinates: "" };
 }

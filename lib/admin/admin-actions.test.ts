@@ -100,15 +100,7 @@ test("an Admin gets through every admin action", async () => {
   expect(await statusOf(live)).toBe("closed");
 });
 
-test("rejecting deletes the Submission's photo from the bucket", async () => {
-  signInAs({ id: "admin-1" });
-  const id = await addShop("pending", "shops/abc.webp");
-
-  await rejectSubmissionAction(id);
-
-  expect(deletePhoto).toHaveBeenCalledWith("shops/abc.webp");
-});
-
+// The photo deletion itself is tested in submissions.test.ts; this checks the ticked checkbox reaches it.
 test("approving with Remove photo ticked deletes the photo; without, it stays", async () => {
   signInAs({ id: "admin-1" });
   const keep = await addShop("pending", "shops/keep.webp");

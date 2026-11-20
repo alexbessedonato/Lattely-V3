@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { afterAll, beforeEach, expect, test } from "vitest";
+import { afterAll, beforeEach, expect, test, vi } from "vitest";
 import { db } from "@/db/client";
 import { ratings, shops } from "@/db/schema";
 import {
@@ -7,8 +7,13 @@ import {
   getPendingSubmissions,
   rejectSubmission,
 } from "@/lib/admin/submissions";
+import { deletePhoto } from "@/lib/photo/photo-bucket";
+
+// Tests don't touch the real bucket: we only check which photos were asked to be deleted.
+vi.mock("@/lib/photo/photo-bucket", () => ({ deletePhoto: vi.fn() }));
 
 beforeEach(async () => {
+  vi.mocked(deletePhoto).mockClear();
   await db.delete(ratings);
   await db.delete(shops);
 });
@@ -77,39 +82,42 @@ test("a Shop that isn't pending anymore can't be approved or rejected", async ()
   expect(await findShop(live)).toMatchObject({ status: "live" });
 });
 
-test("approving keeps the Member's photo, and has no photo to delete", async () => {
+test("approving keeps the Member's photo", async () => {
   const id = await addShop("nomad", "pending", "shops/abc.webp");
 
-  expect(await approveSubmission(id, { x: 2.17, y: 41.38 })).toBeNull();
+  await approveSubmission(id, { x: 2.17, y: 41.38 });
 
   expect(await findShop(id)).toMatchObject({ photoKey: "shops/abc.webp" });
+  expect(deletePhoto).not.toHaveBeenCalled();
 });
 
-test("approving without the photo drops it, and hands back its key to delete", async () => {
+test("approving without the photo drops it and deletes it from the bucket", async () => {
   const id = await addShop("nomad", "pending", "shops/abc.webp");
 
-  const removed = await approveSubmission(id, { x: 2.17, y: 41.38 }, true);
+  await approveSubmission(id, { x: 2.17, y: 41.38 }, true);
 
-  expect(removed).toBe("shops/abc.webp");
   expect(await findShop(id)).toMatchObject({ status: "live", photoKey: null });
+  expect(deletePhoto).toHaveBeenCalledWith("shops/abc.webp");
 });
 
-test("rejecting drops the photo, and hands back its key to delete", async () => {
+test("rejecting drops the photo and deletes it from the bucket", async () => {
   const id = await addShop("nomad", "pending", "shops/abc.webp");
 
-  expect(await rejectSubmission(id)).toBe("shops/abc.webp");
+  await rejectSubmission(id);
 
   expect(await findShop(id)).toMatchObject({
     status: "rejected",
     photoKey: null,
   });
+  expect(deletePhoto).toHaveBeenCalledWith("shops/abc.webp");
 });
 
 test("a Shop that isn't pending anymore keeps its photo", async () => {
   const live = await addShop("live", "live", "shops/abc.webp");
 
-  expect(await rejectSubmission(live)).toBeNull();
-  expect(await approveSubmission(live, { x: 2.17, y: 41.38 }, true)).toBeNull();
+  await rejectSubmission(live);
+  await approveSubmission(live, { x: 2.17, y: 41.38 }, true);
 
   expect(await findShop(live)).toMatchObject({ photoKey: "shops/abc.webp" });
+  expect(deletePhoto).not.toHaveBeenCalled();
 });
