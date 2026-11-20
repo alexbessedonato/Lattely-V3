@@ -38,7 +38,7 @@ async function AdminsOnly() {
     notFound();
   }
 
-  const pending = await getPendingSubmissions();
+  const pendingSubmissions = await getPendingSubmissions();
   const live = await getLiveShops();
 
   return (
@@ -47,21 +47,24 @@ async function AdminsOnly() {
         Admin
       </h1>
 
-      <section aria-labelledby="pending-title" className="flex flex-col gap-3">
+      <section
+        aria-labelledby="pending-submissions-title"
+        className="flex flex-col gap-3"
+      >
         <h2
-          id="pending-title"
+          id="pending-submissions-title"
           className="font-heading text-[22px] font-semibold"
         >
           Waiting for review
         </h2>
 
-        {pending.length === 0 && (
+        {pendingSubmissions.length === 0 && (
           <p className="rounded-[20px] border border-dashed border-mocha p-5 text-mocha">
             Nothing to review. Nice.
           </p>
         )}
 
-        {pending.map((submission) => (
+        {pendingSubmissions.map((submission) => (
           <SubmissionCard
             key={submission.id}
             submission={submission}

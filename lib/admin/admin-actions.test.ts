@@ -63,22 +63,22 @@ for (const [who, member] of [
 ] as const) {
   test(`${who} is refused by every admin action, and nothing changes`, async () => {
     signInAs(member);
-    const pending = await addShop("pending");
+    const pendingSubmission = await addShop("pending");
     const live = await addShop("live");
 
     await expect(
       approveSubmissionAction(
-        pending,
+        pendingSubmission,
         { coordinates: "" },
         coordinates("41.38, 2.17"),
       ),
     ).rejects.toThrow("Only Admins");
-    await expect(rejectSubmissionAction(pending)).rejects.toThrow(
+    await expect(rejectSubmissionAction(pendingSubmission)).rejects.toThrow(
       "Only Admins",
     );
     await expect(closeShopAction(live)).rejects.toThrow("Only Admins");
 
-    expect(await statusOf(pending)).toBe("pending");
+    expect(await statusOf(pendingSubmission)).toBe("pending");
     expect(await statusOf(live)).toBe("live");
   });
 }

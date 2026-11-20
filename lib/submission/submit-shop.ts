@@ -4,7 +4,7 @@ import { shops } from "@/db/schema";
 import type { Submission } from "@/lib/submission/types/submission";
 
 // How many Submissions a Member can have waiting for an Admin at once.
-export const MAX_PENDING = 3;
+export const MAX_PENDING_SUBMISSIONS = 3;
 
 // Saves the Member's Submission as a pending Shop, with its photo's key if it has one.
 // Returns why it was refused, or null if it was saved.
@@ -14,12 +14,12 @@ export async function submitShop(
   photoKey: string | null = null,
 ): Promise<string | null> {
   // shortcut: two submits at the exact same moment could both pass this check; add a database rule if that ever matters.
-  const [{ pending }] = await db
-    .select({ pending: count() })
+  const [{ pendingSubmissions }] = await db
+    .select({ pendingSubmissions: count() })
     .from(shops)
     .where(and(eq(shops.submittedBy, member.id), eq(shops.status, "pending")));
-  if (pending >= MAX_PENDING) {
-    return `You already have ${MAX_PENDING} shops waiting for review. You can submit another once one is checked.`;
+  if (pendingSubmissions >= MAX_PENDING_SUBMISSIONS) {
+    return `You already have ${MAX_PENDING_SUBMISSIONS} shops waiting for review. You can submit another once one is checked.`;
   }
 
   await db.insert(shops).values({

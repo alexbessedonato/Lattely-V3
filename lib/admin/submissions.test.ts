@@ -37,8 +37,11 @@ test("only pending Shops are listed for an Admin, oldest first", async () => {
   await addShop("live", "live");
   await addShop("second", "pending");
 
-  const pending = await getPendingSubmissions();
-  expect(pending.map((shop) => shop.name)).toEqual(["first", "second"]);
+  const pendingSubmissions = await getPendingSubmissions();
+  expect(pendingSubmissions.map((shop) => shop.name)).toEqual([
+    "first",
+    "second",
+  ]);
 });
 
 test("approving makes the Shop live at the given point", async () => {

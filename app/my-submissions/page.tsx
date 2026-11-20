@@ -7,7 +7,7 @@ import { BackToRanking } from "@/components/back-to-ranking";
 import { buttonVariants } from "@/components/ui/button";
 import { getMember } from "@/lib/auth/auth-server";
 import { getMySubmissions } from "@/lib/submission/my-submissions";
-import { MAX_PENDING } from "@/lib/submission/submit-shop";
+import { MAX_PENDING_SUBMISSIONS } from "@/lib/submission/submit-shop";
 import { cn } from "cn";
 
 export const metadata: Metadata = { title: "My submissions · Lattely" };
@@ -81,7 +81,9 @@ async function MembersOnly({
     );
   }
 
-  const pending = submissions.filter((shop) => shop.status === "pending");
+  const pendingSubmissions = submissions.filter(
+    (shop) => shop.status === "pending",
+  );
 
   return (
     <>
@@ -114,7 +116,7 @@ async function MembersOnly({
         </ul>
 
         <p className="mt-4 text-sm leading-normal text-mocha">
-          {`${pending.length} of ${MAX_PENDING} waiting for review.`}
+          {`${pendingSubmissions.length} of ${MAX_PENDING_SUBMISSIONS} waiting for review.`}
         </p>
       </section>
     </>
