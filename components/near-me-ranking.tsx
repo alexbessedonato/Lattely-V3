@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Ranking } from "@/components/ranking";
 import { useLocationStore } from "@/lib/location/location-store";
 import { getRankingNearMe } from "@/lib/ranking/ranking-near-me";
-import { defaultRadiusM, filterParams } from "@/lib/ranking/search-params";
+import { filterParams, radiusOrDefault } from "@/lib/ranking/search-params";
 import type { RankedShop } from "@/lib/ranking/types/ranked-shop";
 
 // The Ranking around the Visitor's own location. Only this browser knows the location,
@@ -13,7 +13,7 @@ import type { RankedShop } from "@/lib/ranking/types/ranked-shop";
 export function NearMeRanking() {
   const location = useLocationStore((state) => state.location);
   const [r] = useQueryState("r", filterParams.r);
-  const radiusM = r ?? defaultRadiusM;
+  const radiusM = radiusOrDefault(r);
   const [ranking, setRanking] = useState<RankedShop[] | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
 

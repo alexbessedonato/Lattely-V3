@@ -17,8 +17,9 @@ import { getBrowserLocation } from "@/lib/location/browser-location";
 import { formatDistance } from "@/lib/format-distance";
 import { useLocationStore } from "@/lib/location/location-store";
 import {
-  defaultRadiusM,
   filterParams,
+  pickNearMe,
+  pickNeighbourhood,
   radiusOptionsM,
   resolveFilter,
 } from "@/lib/ranking/search-params";
@@ -50,14 +51,14 @@ export function Filters({
         setLocation(location);
         setLocationFailed(false);
         // Already near=me (a shared link, or asking again): the URL is right, so don't add a Back step.
-        if (!nearMe) setFilter({ n: null, near: "me", r: defaultRadiusM });
+        if (!nearMe) setFilter(pickNearMe());
       },
       // Denied, or the browser couldn't find the Visitor: the current results stay.
       () => {
         setLocationFailed(true);
-        // A shared near=me link has no results yet, so show all of Barcelona. Replace: Back shouldn't ask again.
+        // A shared near=me link has no results yet, so show all of Barcelona (like picking it). Replace: Back shouldn't ask again.
         if (nearMe && !location) {
-          setFilter({ near: null, r: null }, { history: "replace" });
+          setFilter(pickNeighbourhood(null), { history: "replace" });
         }
       },
     );
@@ -94,12 +95,7 @@ export function Filters({
             value={neighbourhood?.slug ?? null}
             onValueChange={(slug) => {
               setLocationFailed(false); // they've picked, so the "pick a neighbourhood" message is done
-              // Picking a Neighbourhood starts at the default Radius; "All of Barcelona" clears both.
-              setFilter(
-                slug
-                  ? { n: slug, near: null, r: defaultRadiusM }
-                  : { n: null, near: null, r: null },
-              );
+              setFilter(pickNeighbourhood(slug));
             }}
           >
             <SelectTrigger

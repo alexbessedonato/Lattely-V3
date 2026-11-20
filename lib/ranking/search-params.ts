@@ -11,7 +11,7 @@ import type { RadiusM } from "@/lib/ranking/types/radius-m";
 export const radiusOptionsM = [500, 1000, 2000, 5000] as const;
 
 // The Radius a Centre point starts with when the URL has no `r`.
-export const defaultRadiusM = 2000;
+export const defaultRadiusM: RadiusM = 2000;
 
 // The next Radius option up, or null after 5 km (only "Anywhere" is wider, and it needs no Centre point).
 export function widerRadius(radiusM: RadiusM) {
@@ -42,7 +42,25 @@ export function resolveFilter<N extends { slug: string }>(
   if (!nearMe && !neighbourhood) {
     return { neighbourhood, nearMe, radiusM: null };
   }
-  return { neighbourhood, nearMe, radiusM: r ?? defaultRadiusM };
+  return { neighbourhood, nearMe, radiusM: radiusOrDefault(r) };
+}
+
+// With a Centre point, the Radius from the URL, or the default when the URL has no `r`.
+export function radiusOrDefault(r: RadiusM | null) {
+  return r ?? defaultRadiusM;
+}
+
+// The filter after picking in the Neighbourhood list: a Neighbourhood turns off Near me and starts at
+// the default Radius; "All of Barcelona" (null) clears the Centre point and so the Radius too.
+export function pickNeighbourhood(slug: string | null) {
+  return slug
+    ? { n: slug, near: null, r: defaultRadiusM }
+    : { n: null, near: null, r: null };
+}
+
+// The filter after Near me finds the Visitor: it turns off the Neighbourhood and starts at the default Radius.
+export function pickNearMe() {
+  return { n: null, near: "me" as const, r: defaultRadiusM };
 }
 
 // Builds a link's URL from filter values, e.g. { n: "gracia", r: 1000 } → "?n=gracia&r=1000".
