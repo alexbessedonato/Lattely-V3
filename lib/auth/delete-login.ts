@@ -14,8 +14,13 @@ export async function deleteLogin(member: { id: string }) {
   }
 }
 
-// What deleteLogin needs. The delete action calls this first, so a missing key stops it before anything is deleted.
-export function neonSettings() {
+// Throws if deleteLogin couldn't work. The delete action calls this first, so a missing key stops it before anything is deleted.
+export function ensureCanDeleteLogin() {
+  neonSettings();
+}
+
+// What deleteLogin needs, or an error saying what's missing.
+function neonSettings() {
   const apiKey = process.env.NEON_API_KEY;
   const projectId = process.env.NEON_PROJECT_ID;
   const branchId = process.env.NEON_AUTH_BRANCH_ID;

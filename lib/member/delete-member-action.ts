@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { deleteMember } from "@/lib/member/delete-member";
 import { auth, getMember } from "@/lib/auth/auth-server";
-import { deleteLogin, neonSettings } from "@/lib/auth/delete-login";
+import { deleteLogin, ensureCanDeleteLogin } from "@/lib/auth/delete-login";
 
 // "Yes, delete it" on /account posts here. It only ever deletes the signed-in Member.
 export async function deleteMemberAction() {
@@ -11,7 +11,7 @@ export async function deleteMemberAction() {
   if (!member) redirect("/sign-in?next=/account");
 
   // Before deleting anything: with no Neon key, stop here rather than half-delete.
-  neonSettings();
+  ensureCanDeleteLogin();
 
   // Ratings first: if a later step fails, the Member can sign in and simply try again.
   await deleteMember(member);

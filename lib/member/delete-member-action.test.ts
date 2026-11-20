@@ -3,7 +3,7 @@ import { db } from "@/db/client";
 import { ratings, shops } from "@/db/schema";
 import { deleteMemberAction } from "@/lib/member/delete-member-action";
 import { auth, getMember } from "@/lib/auth/auth-server";
-import { deleteLogin, neonSettings } from "@/lib/auth/delete-login";
+import { deleteLogin, ensureCanDeleteLogin } from "@/lib/auth/delete-login";
 
 // Tests can't sign in or reach Neon, so these are fakes; each test picks who is "signed in".
 vi.mock("@/lib/auth/auth-server", () => ({
@@ -12,7 +12,7 @@ vi.mock("@/lib/auth/auth-server", () => ({
 }));
 vi.mock("@/lib/auth/delete-login", () => ({
   deleteLogin: vi.fn(),
-  neonSettings: vi.fn(),
+  ensureCanDeleteLogin: vi.fn(),
 }));
 // redirect() only works inside a real request; here it throws so we can see where it went.
 vi.mock("next/navigation", () => ({
@@ -73,7 +73,7 @@ test("if Neon refuses to delete the login, the action fails instead of pretendin
 
 test("if the Neon key isn't set, nothing is deleted and the Member stays signed in", async () => {
   signInAs({ id: "member-1" });
-  vi.mocked(neonSettings).mockImplementation(() => {
+  vi.mocked(ensureCanDeleteLogin).mockImplementation(() => {
     throw new Error("NEON_API_KEY is not set");
   });
 
